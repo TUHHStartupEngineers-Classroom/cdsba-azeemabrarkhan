@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Oliver Mork">
+<meta name="author" content="Azeem Abrar Khan">
 
 <title>MyLabJournal - Statistical Concepts</title>
 <style>
@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -64,6 +98,11 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+<link href="../../site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+<script src="../../site_libs/pagedtable-1.1/js/pagedtable.js"></script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 </head>
 
@@ -165,7 +204,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Author</div>
     <div class="quarto-title-meta-contents">
-             <p>Oliver Mork </p>
+             <p>Azeem Abrar Khan </p>
           </div>
   </div>
     
@@ -176,17 +215,90 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
+<ul>
+<li>For each variable, compute the following values. You can use the built-in functions or use the mathematical formulas.
+<ul>
+<li>expected value</li>
+<li>variance</li>
+<li>standard deviation</li>
+</ul></li>
+</ul>
+<div class="cell" data-hash="02_statistics_cache/html/unnamed-chunk-2_7a419ad5d04e8e26e1c6646ab1f529b9">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>random_vars <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"../data/random_vars.rds"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2"></a>random_vars <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="at">expectedAge =</span> <span class="fu">mean</span>(age), <span class="at">varianceAge =</span> <span class="fu">var</span>(age), <span class="at">stdAge =</span> <span class="fu">sd</span>(age))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["expectedAge"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["varianceAge"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["stdAge"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"33.471","2":"340.6078","3":"18.45556"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
 </div>
-<div class="callout-title-container flex-fill">
-Note
 </div>
 </div>
-<div class="callout-body-container callout-body">
-<p>You can delete everything in here and start fresh.</p>
+<div class="cell" data-hash="02_statistics_cache/html/unnamed-chunk-3_7c3e76bfc685f483c094a11dff31d0a3">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>random_vars <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="at">expectedIncome =</span> <span class="fu">mean</span>(income), <span class="at">varianceIncome =</span> <span class="fu">var</span>(income), <span class="at">stdIncome =</span> <span class="fu">sd</span>(income))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["expectedIncome"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["varianceIncome"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["stdIncome"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"3510.731","2":"8625646","3":"2936.945"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+<ul>
+<li>Explain, if it makes sense to compare the standard deviations.</li>
+</ul>
+<p>No!, because standard deviation only represents how far the samples are from the sample-mean. Whereas, covariance is the measure of linear dependency, but it can not be compared easily. Correlation can have value form -1 to 1 and can be used instead to interpret the relationship between two quantities.</p>
+<ul>
+<li>Then, examine the relationship between both variables and compute:
+<ul>
+<li>covariance</li>
+<li>correlation</li>
+</ul></li>
+</ul>
+<div class="cell" data-hash="02_statistics_cache/html/unnamed-chunk-4_a80f65d8695a1ef90679e93c94c6aff2">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>random_vars <span class="sc">%&gt;%</span> <span class="fu">summarise</span>(<span class="at">covariance =</span> <span class="fu">cov</span>(age,income), <span class="at">correlation =</span> <span class="fu">cor</span>(age,income))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div data-pagedtable="false">
+  <script data-pagedtable-source="" type="application/json">
+{"columns":[{"label":["covariance"],"name":[1],"type":["dbl"],"align":["right"]},{"label":["correlation"],"name":[2],"type":["dbl"],"align":["right"]}],"data":[{"1":"29700.15","2":"0.5479432"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+  </script>
+</div>
+</div>
+</div>
+<ul>
+<li>What measure is easier to interpret? Please discuss your interpretation.</li>
+</ul>
+<p>As stated above, covariance is not easy interpret, therefore, correlation is easier to interpret.</p>
+<ul>
+<li>Compute the conditional expected value for:
+<ul>
+<li>E[income | age &lt;= 18]</li>
+<li>E[income | age <span class="math inline">\(\epsilon\)</span> [18,65)]</li>
+<li>E[income | age &gt;= 65]</li>
+</ul></li>
+</ul>
+<div class="cell" data-hash="02_statistics_cache/html/unnamed-chunk-5_d20663cb57b8c844b6f6184381274f0f">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># E[income | age &lt;= 18]</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="fu">mean</span>(random_vars <span class="sc">%&gt;%</span> <span class="fu">filter</span>(age<span class="sc">&lt;=</span><span class="dv">18</span>) <span class="sc">%&gt;%</span> <span class="fu">select</span>(income) <span class="sc">%&gt;%</span> <span class="fu">pull</span>(income))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; [1] 389.6074</code></pre>
+</div>
+</div>
+<div class="cell" data-hash="02_statistics_cache/html/unnamed-chunk-6_17af3c4a868057efe5c4e9931ee6a870">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="co"># E[income | age ϵ [18,65)]</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="fu">mean</span>(random_vars <span class="sc">%&gt;%</span> <span class="fu">filter</span>(age<span class="sc">&gt;=</span><span class="dv">18</span> <span class="sc">&amp;</span> age<span class="sc">&lt;</span><span class="dv">65</span>) <span class="sc">%&gt;%</span> <span class="fu">select</span>(income) <span class="sc">%&gt;%</span> <span class="fu">pull</span>(income))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; [1] 4685.734</code></pre>
+</div>
+</div>
+<div class="cell" data-hash="02_statistics_cache/html/unnamed-chunk-7_45c2686c7f10255272e944b35ad16884">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="co"># E[income | age &gt;= 65]</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="fu">mean</span>(random_vars <span class="sc">%&gt;%</span> <span class="fu">filter</span>(age<span class="sc">&gt;=</span><span class="dv">65</span>) <span class="sc">%&gt;%</span> <span class="fu">select</span>(income) <span class="sc">%&gt;%</span> <span class="fu">pull</span>(income))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; [1] 1777.237</code></pre>
 </div>
 </div>
 
