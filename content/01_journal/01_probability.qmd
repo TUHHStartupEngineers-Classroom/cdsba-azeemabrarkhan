@@ -1,97 +1,105 @@
 ---
-title: "Probability Theory (submitted by Azeem Abrar Khan)"
+title: "Probability Theory"
 ---
 
-::: callout-note
-You can delete everything in here and start fresh.
-:::
-
-This is a `.qmd` file. It is plain text with special features. Any time you write just like this, it will be compiled to normal text in the website. If you put a \# in front of your text, it will create a top level-header.
-
-To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
-
-# Text Formatting
-
-*italics* and **bold**
-
-superscript^2^ / subscript~2~
-
-~~strikethrough~~
-
-`verbatim code`
-
-> Blockquote
-
-# Headings
-
-## Header 2
-### Header 3
-#### Header 4
-##### Header 5
-###### Header 6
-
-# Links & Images
-
-<https://quarto.org>
-
-[Quarto](https://quarto.org)
-
-![Caption](../../assets/img/elephant.png)
-
-[![Caption](../../assets/img/elephant.png)](https://quarto.org)
-
-[![Caption](../../assets/img/elephant.png)](https://quarto.org "An elephant")
-
-
-# Lists
-
-* unordered list
-    + sub-item 1
-    + sub-item 2
-        - sub-sub-item 1
-        
-*   item 2
-
-    Continued (indent 4 spaces)
-    
-    
-1. ordered list
-2. item 2
-    i) sub-item 1
-         A.  sub-sub-item 1
-         
-(@)  A list whose numbering
-
-continues after
-
-(@)  an interruption
-
-# Tables
-
-| Right | Left | Default | Center |
-|------:|:-----|---------|:------:|
-|   12  |  12  |    12   |    12  |
-|  123  |  123 |   123   |   123  |
-|    1  |    1 |     1   |     1  |
-
-# Source Code
-
-Use ``` to delimit blocks of source code:
-
-```
-code
-```
-
-Add a language to syntax highlight code blocks:
+# Assignment-I
 
 ```{r}
-1 + 1
+pS = 0.3              #scope to be changed
+pTWhenS = 0.2         #'on time' when scope changes
+pTNotWhenS = 0.8      #'not on time' when scope changes
+
+pSNot = 0.7           #scope to not be changed
+pTWhenSNot = 0.6      #'on time' when scope does not change
+pTNotWhenSNot = 0.4   #'not on time' when scope does not change
 ```
 
 ```{r}
-cars
+pTAndS = pS * pTWhenS                 #'change in scope' and 'on time'
+print(pTAndS)
 ```
 
 ```{r}
-plot(cars)
+pTAndSNot = pSNot * pTWhenSNot         #'no change in scope' and 'on time'
+print(pTAndSNot)
 ```
+
+```{r}
+pTNotAndS = pS * pTNotWhenS            #'change in scope' and 'not on time'
+print(pTNotAndS)
+```
+
+```{r}
+pTNotAndSNot = pSNot * pTNotWhenSNot   #'no change in scope' and 'not on time'
+print(pTNotAndSNot)
+```
+
+```{r}
+totalProbability = pTAndS + pTAndSNot + pTNotAndS + pTNotAndSNot
+print(totalProbability)
+```
+
+# Assignment-II
+
+![Use of application depending on the device](../../assets/img/chap1.1.png)
+
+```{r}
+#percentages according to devices used
+onlySmartphone <- 42.3
+onlyTablet <- 27.8
+onlyComputer <- 10.0
+smartphoneAndTablet <- 7.3
+tabletAndComputer <- 3.3
+computerAndSmartphone <- 8.8
+allThreeDevices <- 0.5
+```
+
+```{r}
+#What is the percentage of customers using all three devices?
+allThreeDevices
+```
+
+```{r}
+#What is the percentage of customers using at least two devices?
+atleastTwoDevices <- smartphoneAndTablet + tabletAndComputer + computerAndSmartphone + allThreeDevices
+print(atleastTwoDevices)
+```
+
+```{r}
+#What is the percentage of customers using only one device?
+onlyOneDevice <- onlySmartphone + onlyTablet + onlyComputer
+print(onlyOneDevice)
+
+```
+
+# Assignment-III
+
+```{r}
+# A: Faulty product and A': Flawless product
+# B: Alarm triggered and B': No Alarm
+# P(B|A): Probability of alarm when the product is faulty
+# P(B'|A'): Probability of no alarm when the product is flawless
+# P(B|A'): Probability of alarm when the product is flawless
+# P(A'|B): Probability of flawless product when the alarm is triggered
+# P(A|B): Probability of faulty product when the alarm is triggered
+
+alarmWhenFaulty <- 0.97 #P(B|A)
+noAlarmWhenFlawless <- 0.99 #P(B'|A')
+alarmWhenFlawless <- 1 - noAlarmWhenFlawless #P(B|A')
+faulty <- 0.04 #P(A)
+flawless <- 1 - faulty #P(A')
+```
+
+```{r}
+# P(A'|B)
+flawlessProductWhenAlarm <- (alarmWhenFlawless * flawless)/(alarmWhenFlawless * flawless + alarmWhenFaulty * faulty)
+print(flawlessProductWhenAlarm)
+```
+
+```{r}
+# P(A|B)
+faultyProductWhenAlarm <- (alarmWhenFaulty * faulty)/(alarmWhenFlawless * flawless + alarmWhenFaulty * faulty)
+print(faultyProductWhenAlarm)
+```
+
+These results show that in case the alarm is triggered, there is a possibility of about **19.83%** that the product is flawless and a probability of **80.16%** that the product is faulty.
