@@ -1,7 +1,77 @@
 ---
 title: "Causality"
 ---
+```{r}
+#| include: false
+library(dplyr)
+library(tidyverse)
+```
 
-::: callout-note
-You can delete everything in here and start fresh.
-:::
+# Causes of spurious correlation
+Spurious correlation can either be because of:
+* Confounding Variables
+* Mediating Variables
+* Random Sampling Error
+
+
+## Confounding Variables
+A change in one variable causes change in other two variables which are not dependent on one another, thus creating spurious correlation between the two variables.
+
+(A -> B) change in A causes change in B
+
+(A -> C) change in A causes change in C
+
+This would seem like B causes change in C, which is not true.
+
+Assume there is an ice cream shop at the beach and this beach is also subjected to shark attacks. When there are more people at the beach, there will be more ice cream sales and increased number of shark attacks.
+
+A -> Number of people, B -> Ice cream sales and C -> Number of shark attacks
+
+```{r}
+numPeople <- 250:1000
+iceCreamSales <- round(0.8*numPeople+rnorm(751, 0, 30))
+numsharkAttacks <- round((5/250)*numPeople+rnorm(751, 1, 1))
+iceCreamSalesAndSharkAttacks <- data.frame(numPeople = 250:1000, iceCreamSales, numsharkAttacks)
+
+ggplot(iceCreamSalesAndSharkAttacks, aes(x = numPeople, y = iceCreamSales)) +
+  geom_point(color = "blue")
+
+ggplot(iceCreamSalesAndSharkAttacks, aes(x = numPeople, y = numsharkAttacks)) +
+  geom_point(color = "red")
+
+ggplot(iceCreamSalesAndSharkAttacks, aes(x = iceCreamSales, y = numsharkAttacks)) +
+  geom_point(color = "green")
+```
+
+It appears from the last scatter plot that increase in ice cream sales increase shark attack (spurious correlation). This is not true as both variables increase with the increase in the number of people.
+
+## Mediating Variables
+The above example can be changed a bit to explain mediating variable as a cause of spurious correlation. Assume an increase in temperature causes more people to visit the beach and an increase in the the number of people will increase the number of shark attacks.
+
+(A -> B -> C) An increase an A, increases B which in turn increases C
+
+C is not dependent on A but it seems that A causes change in C (spurious correlation).
+
+A -> Temperature, B -> Number of people and C -> Number of shark attacks
+
+```{r}
+temperature <- 15:40
+numPeople <- round(13*temperature+rnorm(26, 0, 30))
+numsharkAttacks <- round((5/250)*numPeople+rnorm(26, 1, 1))
+numPeopleAndSharkAttacks <- data.frame(temperature = 15:40, numPeople, numsharkAttacks)
+
+ggplot(numPeopleAndSharkAttacks, aes(x = temperature, y = numPeople)) +
+  geom_point(color = "blue")
+
+ggplot(numPeopleAndSharkAttacks, aes(x = numPeople, y = numsharkAttacks)) +
+  geom_point(color = "red")
+
+ggplot(numPeopleAndSharkAttacks, aes(x = temperature, y = numsharkAttacks)) +
+  geom_point(color = "green")
+```
+
+Similarly, the last graph represents some erroneous result as it suggests that number of shark attacks increases with the increase in temperature.
+
+## Random Sampling Error
+
+As the number of random samples in a sample space is limited do not always reflect the population mean accurately. Effects can be produced in the samples due to random sampling error.
