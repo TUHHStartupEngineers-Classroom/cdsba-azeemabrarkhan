@@ -2,6 +2,123 @@
 title: "Regression and Statistical Inference"
 ---
 
-::: callout-note
-You can delete everything in here and start fresh.
-:::
+```{r}
+#| include: false
+library(dplyr)
+library(tidyverse)
+```
+
+# 1
+* Read the data and check the dimensions. How many rows and how many columns does the data have? You could use e.g. the dim() command.
+
+```{r}
+carPrices <- readRDS("../data/car_prices.rds")
+dim(carPrices)
+```
+
+# 2
+* Use appropriate commands to get a more detailed look at the data. What data types do you see? How do numbers differ from strings regarding their data type?
+
+```{r}
+# To check the initial values and the class type of quantities row-wise
+# we have 'dbl' and 'chr' variables.
+# There are no binary or Boolean variables in the data set
+glimpse(carPrices)
+```
+
+```{r}
+# We can use summary function to have more statistical data for every quantity.
+# But first we need to convert every chr type variable into factor variable
+carPrices <- carPrices %>% mutate_if(is.character, as.factor)
+
+# For factor variables, we get count,
+# whereas, we get min, max, mean, median and quartiles
+summary(carPrices)
+```
+
+```{r}
+# To calculate correlation between variables while deselecting all factor variables
+carPrices %>% select(-aspiration, -doornumber, -carbody, -drivewheel, -enginelocation, -enginetype, -cylindernumber, -fuelsystem) %>% cor() %>% round(2) %>% Matrix::tril()
+```
+
+We can see considerable correlation between price and most of the other quantities.
+
+# 3
+* Run a linear regression. You want to explain what factors are relevant for the pricing of a car.
+
+```{r}
+#First, we consider all variables as independent variables
+# and include them in our regression model.
+lm_all <- lm(price ~ ., data = carPrices)
+summary(lm_all)
+```
+
+First of all, we need to state our null hypothesis that there is no correlation between the given quantity and the price of a car. The alternate hypothesis is obviously opposite and states the presence of correlation.
+
+In order to find if the null hypothesis for the given quantity is to be accepted or rejected, we compare the p-value for the estimate with an arbitrary significance level (alpha), which is usually 0.05.
+If the p-value is lower than alpha then we reject the null hypothesis and accept the alternate hypothesis.
+
+By comparing the p-values in the table above we can find the following variables to be statistically significant but at different levels (represented by the number of * followed).
+
+| Variable | Class type | Significance level |
+|----------|:------------------:|:------------------:|
+| carbodyhardtop | factor (carbody) | * |
+| carbodyhatchback | factor (carbody) | ** |
+| carbodywagon | factor (carbody) | * |
+| enginelocationrear | factor (enginelocation) | * |
+| carwidth | dbl | ** |
+| enginetypeohc | factor (enginetype) | *** |
+| enginetypeohcv | factor (enginetype) | *** |
+| cylindernumberfive | factor (cylindernumber) | *** |
+| cylindernumberfour | factor (cylindernumber) | *** |
+| cylindernumbersix | factor (cylindernumber) | ** |
+| cylindernumbertwelve | factor (cylindernumber) | ** |
+| enginesize | dbl | *** |
+| stroke | dbl | *** |
+| peakrpm | dbl | *** |
+
+In the table, we can see that some factor variables also affect the price of a car if they have specific class.
+
+```{r}
+# Calculate the confidence internal of 95% to also find out 
+# statistical significant variables.
+confint(lm_all, level = 0.95)
+```
+
+If the range of confidence interval stays negative or positive throughout, the variable is said to be statistical significant (rejecting null hypothesis). We again find the same variables to be significant as we found out after comparing the p-value of estimates with an arbitrary significance level (alpha).
+
+# 4
+* Choose one regressor and
+    + explain what data type it is and what values it can take on
+    + what effect is has on the price and what changing the value would have as a result
+    + whether its effect is statistically significant.
+    
+'enginesize' variable is chosen for this set of questions. The estimated and p-value can be taken from the summary of the regression model.
+
+| Coefficient | Estimate | P-value |
+|-------------|:--------:|:-------:|
+| enginesize | 125.934 | 5.00e-06 |
+
+The variable is of type dbl and the values it can take can be found by calling summary function.
+```{r}
+# Basic statistics of enginesize variable
+summary(carPrices %>% select(enginesize))
+```
+
+As the estimate value is positive (greater than 0), there is a positive correlation between enginesize and price of a car. In other words, the price of a car increases with the increase of enginesize. We can also check their scatter plot.
+
+```{r}
+ggplot(carPrices, aes(x = enginesize, y = price)) + geom_point(alpha = 0.8)
+```
+
+The p-value of enginesize is found to be **5.00e-06**, which is less than the arbitrary significance value **(alpha = 0.05)**. Therefore, enginesize is statistically significant.
+
+# 5
+* Add a variable seat_heating to the data and assign a value TRUE for all observations. You can use e.g. df %>% mutate(new_variable = value). Assign it to a new object and run a regression. What coefficient do you get for the new variable seat_heating and how can you explain it?
+
+```{r}
+newCarPrices <- carPrices %>% mutate(seat_heating=TRUE)
+summary(lm(price ~ ., data = newCarPrices))
+```
+
+The estimate for our newly added variable is found to be NA (not available). This is because the value is same for every observation and does not have any influence on the price of the car.

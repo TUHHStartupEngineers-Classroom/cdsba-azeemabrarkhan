@@ -7,6 +7,7 @@ title: "Statistical Concepts"
 library(dplyr)
 ```
 
+# 1
 * For each variable, compute the following values. You can use the built-in functions or use the mathematical formulas.
     + expected value
     + variance
@@ -21,10 +22,12 @@ random_vars %>% summarise(expectedAge = mean(age), varianceAge = var(age), stdAg
 random_vars %>% summarise(expectedIncome = mean(income), varianceIncome = var(income), stdIncome = sd(income))
 ```
 
+# 2
 * Explain, if it makes sense to compare the standard deviations.
 
 No!, because standard deviation only represents how far the samples are from the sample-mean. Whereas, covariance is the measure of linear dependency, but it can not be compared easily. Correlation can have value form -1 to 1 and can be used instead to interpret the relationship between two quantities.
 
+# 3
 * Then, examine the relationship between both variables and compute:
     + covariance
     + correlation
@@ -33,10 +36,12 @@ No!, because standard deviation only represents how far the samples are from the
 random_vars %>% summarise(covariance = cov(age,income), correlation = cor(age,income))
 ```
 
+# 4
 * What measure is easier to interpret? Please discuss your interpretation.
 
 As stated above, covariance is not easy interpret, therefore, correlation is easier to interpret.
 
+# 5
 * Compute the conditional expected value for:
     + E[income | age <= 18]
     + E[income | age $\epsilon$ [18,65)]

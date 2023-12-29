@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Oliver Mork">
+<meta name="author" content="Azeem Abrar Khan">
 
 <title>MyLabJournal - Regression and Statistical Inference</title>
 <style>
@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -43,6 +77,9 @@ ul.task-list li input[type="checkbox"] {
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
 <link href="../../site_libs/bootstrap/bootstrap-dark.min.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script src="../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -63,6 +100,9 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+
+<link href="../../site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+<script src="../../site_libs/pagedtable-1.1/js/pagedtable.js"></script>
 
 
 </head>
@@ -148,7 +188,17 @@ ul.task-list li input[type="checkbox"] {
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul class="collapse">
+  <li><a href="#section" id="toc-section" class="nav-link active" data-scroll-target="#section">1</a></li>
+  <li><a href="#section-1" id="toc-section-1" class="nav-link" data-scroll-target="#section-1">2</a></li>
+  <li><a href="#section-2" id="toc-section-2" class="nav-link" data-scroll-target="#section-2">3</a></li>
+  <li><a href="#section-3" id="toc-section-3" class="nav-link" data-scroll-target="#section-3">4</a></li>
+  <li><a href="#section-4" id="toc-section-4" class="nav-link" data-scroll-target="#section-4">5</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -165,7 +215,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Author</div>
     <div class="quarto-title-meta-contents">
-             <p>Oliver Mork </p>
+             <p>Azeem Abrar Khan </p>
           </div>
   </div>
     
@@ -176,21 +226,480 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
+<section id="section" class="level1">
+<h1>1</h1>
+<ul>
+<li>Read the data and check the dimensions. How many rows and how many columns does the data have? You could use e.g.&nbsp;the dim() command.</li>
+</ul>
+<div class="cell" data-hash="03_regression_cache/html/unnamed-chunk-2_9dfc3577bd959c0046cdfeab0dbab67a">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>carPrices <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"../data/car_prices.rds"</span>)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="fu">dim</span>(carPrices)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; [1] 181  22</code></pre>
 </div>
-<div class="callout-title-container flex-fill">
-Note
+</div>
+</section>
+<section id="section-1" class="level1">
+<h1>2</h1>
+<ul>
+<li>Use appropriate commands to get a more detailed look at the data. What data types do you see? How do numbers differ from strings regarding their data type?</li>
+</ul>
+<div class="cell" data-hash="03_regression_cache/html/unnamed-chunk-3_21df16e7a6343525a31fd46bfeb5d1ea">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># To check the initial values and the class type of quantities row-wise</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="co"># we have 'dbl' and 'chr' variables.</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="co"># There are no binary or Boolean variables in the data set</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="fu">glimpse</span>(carPrices)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; Rows: 181
+#&gt; Columns: 22
+#&gt; $ aspiration       &lt;chr&gt; "std", "std", "std", "std", "std", "std", "std", "std…
+#&gt; $ doornumber       &lt;chr&gt; "two", "two", "two", "four", "four", "two", "four", "…
+#&gt; $ carbody          &lt;chr&gt; "convertible", "convertible", "hatchback", "sedan", "…
+#&gt; $ drivewheel       &lt;chr&gt; "rwd", "rwd", "rwd", "fwd", "4wd", "fwd", "fwd", "fwd…
+#&gt; $ enginelocation   &lt;chr&gt; "front", "front", "front", "front", "front", "front",…
+#&gt; $ wheelbase        &lt;dbl&gt; 88.6, 88.6, 94.5, 99.8, 99.4, 99.8, 105.8, 105.8, 105…
+#&gt; $ carlength        &lt;dbl&gt; 168.8, 168.8, 171.2, 176.6, 176.6, 177.3, 192.7, 192.…
+#&gt; $ carwidth         &lt;dbl&gt; 64.1, 64.1, 65.5, 66.2, 66.4, 66.3, 71.4, 71.4, 71.4,…
+#&gt; $ carheight        &lt;dbl&gt; 48.8, 48.8, 52.4, 54.3, 54.3, 53.1, 55.7, 55.7, 55.9,…
+#&gt; $ curbweight       &lt;dbl&gt; 2548, 2548, 2823, 2337, 2824, 2507, 2844, 2954, 3086,…
+#&gt; $ enginetype       &lt;chr&gt; "dohc", "dohc", "ohcv", "ohc", "ohc", "ohc", "ohc", "…
+#&gt; $ cylindernumber   &lt;chr&gt; "four", "four", "six", "four", "five", "five", "five"…
+#&gt; $ enginesize       &lt;dbl&gt; 130, 130, 152, 109, 136, 136, 136, 136, 131, 131, 108…
+#&gt; $ fuelsystem       &lt;chr&gt; "mpfi", "mpfi", "mpfi", "mpfi", "mpfi", "mpfi", "mpfi…
+#&gt; $ boreratio        &lt;dbl&gt; 3.47, 3.47, 2.68, 3.19, 3.19, 3.19, 3.19, 3.19, 3.13,…
+#&gt; $ stroke           &lt;dbl&gt; 2.68, 2.68, 3.47, 3.40, 3.40, 3.40, 3.40, 3.40, 3.40,…
+#&gt; $ compressionratio &lt;dbl&gt; 9.00, 9.00, 9.00, 10.00, 8.00, 8.50, 8.50, 8.50, 8.30…
+#&gt; $ horsepower       &lt;dbl&gt; 111, 111, 154, 102, 115, 110, 110, 110, 140, 160, 101…
+#&gt; $ peakrpm          &lt;dbl&gt; 5000, 5000, 5000, 5500, 5500, 5500, 5500, 5500, 5500,…
+#&gt; $ citympg          &lt;dbl&gt; 21, 21, 19, 24, 18, 19, 19, 19, 17, 16, 23, 23, 21, 2…
+#&gt; $ highwaympg       &lt;dbl&gt; 27, 27, 26, 30, 22, 25, 25, 25, 20, 22, 29, 29, 28, 2…
+#&gt; $ price            &lt;dbl&gt; 13495.00, 16500.00, 16500.00, 13950.00, 17450.00, 152…</code></pre>
 </div>
 </div>
-<div class="callout-body-container callout-body">
-<p>You can delete everything in here and start fresh.</p>
+<div class="cell" data-hash="03_regression_cache/html/unnamed-chunk-4_3cc96f3dd68674e9509eab48b96af6d7">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># We can use summary function to have more statistical data for every quantity.</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="co"># But first we need to convert every chr type variable into factor variable</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a>carPrices <span class="ot">&lt;-</span> carPrices <span class="sc">%&gt;%</span> <span class="fu">mutate_if</span>(is.character, as.factor)</span>
+<span id="cb5-4"><a href="#cb5-4"></a></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="co"># For factor variables, we get count,</span></span>
+<span id="cb5-6"><a href="#cb5-6"></a><span class="co"># whereas, we get min, max, mean, median and quartiles</span></span>
+<span id="cb5-7"><a href="#cb5-7"></a><span class="fu">summary</span>(carPrices)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt;  aspiration  doornumber        carbody   drivewheel enginelocation
+#&gt;  std  :157   four:98    convertible: 6   4wd:  9    front:178     
+#&gt;  turbo: 24   two :83    hardtop    : 7   fwd:111    rear :  3     
+#&gt;                         hatchback  :65   rwd: 61                  
+#&gt;                         sedan      :81                            
+#&gt;                         wagon      :22                            
+#&gt;                                                                   
+#&gt;    wheelbase        carlength        carwidth       carheight    
+#&gt;  Min.   : 86.60   Min.   :141.1   Min.   :60.30   Min.   :47.80  
+#&gt;  1st Qu.: 94.50   1st Qu.:166.3   1st Qu.:64.00   1st Qu.:52.00  
+#&gt;  Median : 96.50   Median :173.0   Median :65.40   Median :53.70  
+#&gt;  Mean   : 98.21   Mean   :173.3   Mean   :65.74   Mean   :53.58  
+#&gt;  3rd Qu.:100.40   3rd Qu.:180.2   3rd Qu.:66.50   3rd Qu.:55.50  
+#&gt;  Max.   :120.90   Max.   :208.1   Max.   :72.30   Max.   :59.80  
+#&gt;    curbweight   enginetype  cylindernumber   enginesize    fuelsystem
+#&gt;  Min.   :1488   dohc : 12   eight :  5     Min.   : 61.0   1bbl:11   
+#&gt;  1st Qu.:2122   dohcv:  1   five  :  7     1st Qu.: 98.0   2bbl:66   
+#&gt;  Median :2410   l    :  7   four  :144     Median :120.0   mfi : 1   
+#&gt;  Mean   :2521   ohc  :133   six   : 23     Mean   :127.1   mpfi:93   
+#&gt;  3rd Qu.:2910   ohcf : 15   three :  1     3rd Qu.:141.0   spdi: 9   
+#&gt;  Max.   :4066   ohcv : 13   twelve:  1     Max.   :326.0   spfi: 1   
+#&gt;    boreratio         stroke     compressionratio   horsepower       peakrpm    
+#&gt;  Min.   :2.540   Min.   :2.07   Min.   : 7.000   Min.   : 48.0   Min.   :4200  
+#&gt;  1st Qu.:3.150   1st Qu.:3.08   1st Qu.: 8.500   1st Qu.: 70.0   1st Qu.:4800  
+#&gt;  Median :3.310   Median :3.23   Median : 9.000   Median : 95.0   Median :5200  
+#&gt;  Mean   :3.325   Mean   :3.23   Mean   : 8.848   Mean   :106.2   Mean   :5182  
+#&gt;  3rd Qu.:3.590   3rd Qu.:3.40   3rd Qu.: 9.400   3rd Qu.:116.0   3rd Qu.:5500  
+#&gt;  Max.   :3.940   Max.   :4.17   Max.   :11.500   Max.   :288.0   Max.   :6600  
+#&gt;     citympg        highwaympg        price      
+#&gt;  Min.   :13.00   Min.   :16.00   Min.   : 5118  
+#&gt;  1st Qu.:19.00   1st Qu.:25.00   1st Qu.: 7609  
+#&gt;  Median :24.00   Median :30.00   Median : 9980  
+#&gt;  Mean   :24.85   Mean   :30.48   Mean   :12999  
+#&gt;  3rd Qu.:30.00   3rd Qu.:34.00   3rd Qu.:16430  
+#&gt;  Max.   :49.00   Max.   :54.00   Max.   :45400</code></pre>
 </div>
 </div>
+<div class="cell" data-hash="03_regression_cache/html/unnamed-chunk-5_8631ab647fa6225b69a31ae27dca511a">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="co"># To calculate correlation between variables while deselecting all factor variables</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a>carPrices <span class="sc">%&gt;%</span> <span class="fu">select</span>(<span class="sc">-</span>aspiration, <span class="sc">-</span>doornumber, <span class="sc">-</span>carbody, <span class="sc">-</span>drivewheel, <span class="sc">-</span>enginelocation, <span class="sc">-</span>enginetype, <span class="sc">-</span>cylindernumber, <span class="sc">-</span>fuelsystem) <span class="sc">%&gt;%</span> <span class="fu">cor</span>() <span class="sc">%&gt;%</span> <span class="fu">round</span>(<span class="dv">2</span>) <span class="sc">%&gt;%</span> Matrix<span class="sc">::</span><span class="fu">tril</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; 14 x 14 Matrix of class "dtrMatrix"
+#&gt;                  wheelbase carlength carwidth carheight curbweight enginesize
+#&gt; wheelbase             1.00         .        .         .          .          .
+#&gt; carlength             0.86      1.00        .         .          .          .
+#&gt; carwidth              0.77      0.83     1.00         .          .          .
+#&gt; carheight             0.54      0.44     0.20      1.00          .          .
+#&gt; curbweight            0.74      0.87     0.85      0.21       1.00          .
+#&gt; enginesize            0.55      0.68     0.74     -0.02       0.87       1.00
+#&gt; boreratio             0.46      0.60     0.55      0.14       0.64       0.58
+#&gt; stroke                0.07      0.07     0.11     -0.15       0.10       0.18
+#&gt; compressionratio     -0.26     -0.25    -0.25     -0.05      -0.31      -0.16
+#&gt; horsepower            0.40      0.60     0.70     -0.09       0.82       0.85
+#&gt; peakrpm              -0.22     -0.19    -0.11     -0.15      -0.16      -0.18
+#&gt; citympg              -0.58     -0.78    -0.74     -0.15      -0.87      -0.74
+#&gt; highwaympg           -0.63     -0.79    -0.75     -0.18      -0.89      -0.76
+#&gt; price                 0.56      0.67     0.74      0.07       0.83       0.89
+#&gt;                  boreratio stroke compressionratio horsepower peakrpm citympg
+#&gt; wheelbase                .      .                .          .       .       .
+#&gt; carlength                .      .                .          .       .       .
+#&gt; carwidth                 .      .                .          .       .       .
+#&gt; carheight                .      .                .          .       .       .
+#&gt; curbweight               .      .                .          .       .       .
+#&gt; enginesize               .      .                .          .       .       .
+#&gt; boreratio             1.00      .                .          .       .       .
+#&gt; stroke               -0.10   1.00                .          .       .       .
+#&gt; compressionratio     -0.20  -0.30             1.00          .       .       .
+#&gt; horsepower            0.59   0.11            -0.22       1.00       .       .
+#&gt; peakrpm              -0.24   0.07             0.16       0.08    1.00       .
+#&gt; citympg              -0.62  -0.09             0.44      -0.81    0.03    1.00
+#&gt; highwaympg           -0.61  -0.07             0.45      -0.78    0.05    0.98
+#&gt; price                 0.55   0.03            -0.18       0.84   -0.02   -0.74
+#&gt;                  highwaympg price
+#&gt; wheelbase                 .     .
+#&gt; carlength                 .     .
+#&gt; carwidth                  .     .
+#&gt; carheight                 .     .
+#&gt; curbweight                .     .
+#&gt; enginesize                .     .
+#&gt; boreratio                 .     .
+#&gt; stroke                    .     .
+#&gt; compressionratio          .     .
+#&gt; horsepower                .     .
+#&gt; peakrpm                   .     .
+#&gt; citympg                   .     .
+#&gt; highwaympg             1.00     .
+#&gt; price                 -0.74  1.00</code></pre>
+</div>
+</div>
+<p>We can see considerable correlation between price and most of the other quantities.</p>
+</section>
+<section id="section-2" class="level1">
+<h1>3</h1>
+<ul>
+<li>Run a linear regression. You want to explain what factors are relevant for the pricing of a car.</li>
+</ul>
+<div class="cell" data-hash="03_regression_cache/html/unnamed-chunk-6_28fefca4d97d0e5a609f40a0f1059723">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="co">#First, we consider all variables as independent variables</span></span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="co"># and include them in our regression model.</span></span>
+<span id="cb9-3"><a href="#cb9-3"></a>lm_all <span class="ot">&lt;-</span> <span class="fu">lm</span>(price <span class="sc">~</span> ., <span class="at">data =</span> carPrices)</span>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="fu">summary</span>(lm_all)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; 
+#&gt; Call:
+#&gt; lm(formula = price ~ ., data = carPrices)
+#&gt; 
+#&gt; Residuals:
+#&gt;    Min     1Q Median     3Q    Max 
+#&gt;  -5662  -1120      0    798   9040 
+#&gt; 
+#&gt; Coefficients:
+#&gt;                        Estimate Std. Error t value Pr(&gt;|t|)    
+#&gt; (Intercept)          -36269.965  15460.866  -2.346 0.020354 *  
+#&gt; aspirationturbo        1846.206   1041.391   1.773 0.078386 .  
+#&gt; doornumbertwo           242.523    571.929   0.424 0.672172    
+#&gt; carbodyhardtop        -3691.743   1424.825  -2.591 0.010561 *  
+#&gt; carbodyhatchback      -3344.335   1238.359  -2.701 0.007757 ** 
+#&gt; carbodysedan          -2292.820   1356.014  -1.691 0.093043 .  
+#&gt; carbodywagon          -3427.921   1490.285  -2.300 0.022885 *  
+#&gt; drivewheelfwd          -504.564   1076.623  -0.469 0.640030    
+#&gt; drivewheelrwd           -15.446   1268.070  -0.012 0.990299    
+#&gt; enginelocationrear     6643.492   2572.275   2.583 0.010806 *  
+#&gt; wheelbase               -30.197     92.776  -0.325 0.745294    
+#&gt; carlength               -29.740     51.672  -0.576 0.565824    
+#&gt; carwidth                731.819    244.533   2.993 0.003258 ** 
+#&gt; carheight               123.195    134.607   0.915 0.361617    
+#&gt; curbweight                2.612      1.781   1.467 0.144706    
+#&gt; enginetypedohcv       -8541.957   4749.685  -1.798 0.074219 .  
+#&gt; enginetypel             978.748   1786.384   0.548 0.584619    
+#&gt; enginetypeohc          3345.252    933.001   3.585 0.000461 ***
+#&gt; enginetypeohcf          972.919   1625.631   0.598 0.550462    
+#&gt; enginetypeohcv        -6222.322   1236.415  -5.033 1.43e-06 ***
+#&gt; cylindernumberfive   -11724.540   3019.192  -3.883 0.000157 ***
+#&gt; cylindernumberfour   -11549.326   3177.177  -3.635 0.000387 ***
+#&gt; cylindernumbersix     -7151.398   2247.230  -3.182 0.001793 ** 
+#&gt; cylindernumberthree   -4318.929   4688.833  -0.921 0.358545    
+#&gt; cylindernumbertwelve -11122.209   4196.494  -2.650 0.008946 ** 
+#&gt; enginesize              125.934     26.541   4.745 5.00e-06 ***
+#&gt; fuelsystem2bbl          177.136    883.615   0.200 0.841400    
+#&gt; fuelsystemmfi         -3041.018   2576.996  -1.180 0.239934    
+#&gt; fuelsystemmpfi          359.278   1001.529   0.359 0.720326    
+#&gt; fuelsystemspdi        -2543.890   1363.546  -1.866 0.064140 .  
+#&gt; fuelsystemspfi          514.766   2499.229   0.206 0.837107    
+#&gt; boreratio             -1306.740   1642.221  -0.796 0.427516    
+#&gt; stroke                -4527.137    922.732  -4.906 2.49e-06 ***
+#&gt; compressionratio       -737.901    555.960  -1.327 0.186539    
+#&gt; horsepower               10.293     22.709   0.453 0.651035    
+#&gt; peakrpm                   2.526      0.634   3.983 0.000108 ***
+#&gt; citympg                 -90.352    166.647  -0.542 0.588538    
+#&gt; highwaympg              154.858    167.148   0.926 0.355761    
+#&gt; ---
+#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#&gt; 
+#&gt; Residual standard error: 2189 on 143 degrees of freedom
+#&gt; Multiple R-squared:  0.9415, Adjusted R-squared:  0.9264 
+#&gt; F-statistic: 62.21 on 37 and 143 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p>First of all, we need to state our null hypothesis that there is no correlation between the given quantity and the price of a car. The alternate hypothesis is obviously opposite and states the presence of correlation.</p>
+<p>In order to find if the null hypothesis for the given quantity is to be accepted or rejected, we compare the p-value for the estimate with an arbitrary significance level (alpha), which is usually 0.05. If the p-value is lower than alpha then we reject the null hypothesis and accept the alternate hypothesis.</p>
+<p>By comparing the p-values in the table above we can find the following variables to be statistically significant but at different levels (represented by the number of * followed).</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th style="text-align: center;">Class type</th>
+<th style="text-align: center;">Significance level</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>carbodyhardtop</td>
+<td style="text-align: center;">factor (carbody)</td>
+<td style="text-align: center;">*</td>
+</tr>
+<tr class="even">
+<td>carbodyhatchback</td>
+<td style="text-align: center;">factor (carbody)</td>
+<td style="text-align: center;">**</td>
+</tr>
+<tr class="odd">
+<td>carbodywagon</td>
+<td style="text-align: center;">factor (carbody)</td>
+<td style="text-align: center;">*</td>
+</tr>
+<tr class="even">
+<td>enginelocationrear</td>
+<td style="text-align: center;">factor (enginelocation)</td>
+<td style="text-align: center;">*</td>
+</tr>
+<tr class="odd">
+<td>carwidth</td>
+<td style="text-align: center;">dbl</td>
+<td style="text-align: center;">**</td>
+</tr>
+<tr class="even">
+<td>enginetypeohc</td>
+<td style="text-align: center;">factor (enginetype)</td>
+<td style="text-align: center;">***</td>
+</tr>
+<tr class="odd">
+<td>enginetypeohcv</td>
+<td style="text-align: center;">factor (enginetype)</td>
+<td style="text-align: center;">***</td>
+</tr>
+<tr class="even">
+<td>cylindernumberfive</td>
+<td style="text-align: center;">factor (cylindernumber)</td>
+<td style="text-align: center;">***</td>
+</tr>
+<tr class="odd">
+<td>cylindernumberfour</td>
+<td style="text-align: center;">factor (cylindernumber)</td>
+<td style="text-align: center;">***</td>
+</tr>
+<tr class="even">
+<td>cylindernumbersix</td>
+<td style="text-align: center;">factor (cylindernumber)</td>
+<td style="text-align: center;">**</td>
+</tr>
+<tr class="odd">
+<td>cylindernumbertwelve</td>
+<td style="text-align: center;">factor (cylindernumber)</td>
+<td style="text-align: center;">**</td>
+</tr>
+<tr class="even">
+<td>enginesize</td>
+<td style="text-align: center;">dbl</td>
+<td style="text-align: center;">***</td>
+</tr>
+<tr class="odd">
+<td>stroke</td>
+<td style="text-align: center;">dbl</td>
+<td style="text-align: center;">***</td>
+</tr>
+<tr class="even">
+<td>peakrpm</td>
+<td style="text-align: center;">dbl</td>
+<td style="text-align: center;">***</td>
+</tr>
+</tbody>
+</table>
+<p>In the table, we can see that some factor variables also affect the price of a car if they have specific class.</p>
+<div class="cell" data-hash="03_regression_cache/html/unnamed-chunk-7_47a913832a2f5f4e8ff85a475c1500d2">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="co"># Calculate the confidence internal of 95% to also find out </span></span>
+<span id="cb11-2"><a href="#cb11-2"></a><span class="co"># statistical significant variables.</span></span>
+<span id="cb11-3"><a href="#cb11-3"></a><span class="fu">confint</span>(lm_all, <span class="at">level =</span> <span class="fl">0.95</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt;                              2.5 %       97.5 %
+#&gt; (Intercept)          -6.683134e+04 -5708.591461
+#&gt; aspirationturbo      -2.123031e+02  3904.715423
+#&gt; doornumbertwo        -8.880057e+02  1373.051204
+#&gt; carbodyhardtop       -6.508183e+03  -875.302661
+#&gt; carbodyhatchback     -5.792190e+03  -896.479709
+#&gt; carbodysedan         -4.973242e+03   387.602227
+#&gt; carbodywagon         -6.373755e+03  -482.087396
+#&gt; drivewheelfwd        -2.632717e+03  1623.588215
+#&gt; drivewheelrwd        -2.522030e+03  2491.138949
+#&gt; enginelocationrear    1.558895e+03 11728.088662
+#&gt; wheelbase            -2.135865e+02   153.193109
+#&gt; carlength            -1.318793e+02    72.399687
+#&gt; carwidth              2.484517e+02  1215.185989
+#&gt; carheight            -1.428819e+02   389.272214
+#&gt; curbweight           -9.086424e-01     6.132334
+#&gt; enginetypedohcv      -1.793062e+04   846.708835
+#&gt; enginetypel          -2.552383e+03  4509.878243
+#&gt; enginetypeohc         1.500996e+03  5189.507548
+#&gt; enginetypeohcf       -2.240453e+03  4186.291965
+#&gt; enginetypeohcv       -8.666335e+03 -3778.310183
+#&gt; cylindernumberfive   -1.769255e+04 -5756.526294
+#&gt; cylindernumberfour   -1.782963e+04 -5269.025514
+#&gt; cylindernumbersix    -1.159348e+04 -2709.316066
+#&gt; cylindernumberthree  -1.358731e+04  4949.451134
+#&gt; cylindernumbertwelve -1.941739e+04 -2827.032165
+#&gt; enginesize            7.347203e+01   178.396665
+#&gt; fuelsystem2bbl       -1.569500e+03  1923.771576
+#&gt; fuelsystemmfi        -8.134945e+03  2052.909867
+#&gt; fuelsystemmpfi       -1.620436e+03  2338.991505
+#&gt; fuelsystemspdi       -5.239202e+03   151.421288
+#&gt; fuelsystemspfi       -4.425440e+03  5454.972678
+#&gt; boreratio            -4.552905e+03  1939.424404
+#&gt; stroke               -6.351094e+03 -2703.179801
+#&gt; compressionratio     -1.836863e+03   361.059971
+#&gt; horsepower           -3.459530e+01    55.182371
+#&gt; peakrpm               1.272152e+00     3.778780
+#&gt; citympg              -4.197613e+02   239.056414
+#&gt; highwaympg           -1.755422e+02   485.258537</code></pre>
+</div>
+</div>
+<p>If the range of confidence interval stays negative or positive throughout, the variable is said to be statistical significant (rejecting null hypothesis). We again find the same variables to be significant as we found out after comparing the p-value of estimates with an arbitrary significance level (alpha).</p>
+</section>
+<section id="section-3" class="level1">
+<h1>4</h1>
+<ul>
+<li>Choose one regressor and
+<ul>
+<li>explain what data type it is and what values it can take on</li>
+<li>what effect is has on the price and what changing the value would have as a result</li>
+<li>whether its effect is statistically significant.</li>
+</ul></li>
+</ul>
+<p>‘enginesize’ variable is chosen for this set of questions. The estimated and p-value can be taken from the summary of the regression model.</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Coefficient</th>
+<th style="text-align: center;">Estimate</th>
+<th style="text-align: center;">P-value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>enginesize</td>
+<td style="text-align: center;">125.934</td>
+<td style="text-align: center;">5.00e-06</td>
+</tr>
+</tbody>
+</table>
+<p>The variable is of type dbl and the values it can take can be found by calling summary function.</p>
+<div class="cell" data-hash="03_regression_cache/html/unnamed-chunk-8_bdb3bfe27fb1f33818714d335d998827">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="co"># Basic statistics of enginesize variable</span></span>
+<span id="cb13-2"><a href="#cb13-2"></a><span class="fu">summary</span>(carPrices <span class="sc">%&gt;%</span> <span class="fu">select</span>(enginesize))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt;    enginesize   
+#&gt;  Min.   : 61.0  
+#&gt;  1st Qu.: 98.0  
+#&gt;  Median :120.0  
+#&gt;  Mean   :127.1  
+#&gt;  3rd Qu.:141.0  
+#&gt;  Max.   :326.0</code></pre>
+</div>
+</div>
+<p>As the estimate value is positive (greater than 0), there is a positive correlation between enginesize and price of a car. In other words, the price of a car increases with the increase of enginesize. We can also check their scatter plot.</p>
+<div class="cell" data-hash="03_regression_cache/html/unnamed-chunk-9_176160757a5d6108d54ce10d5e9f5b42">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="fu">ggplot</span>(carPrices, <span class="fu">aes</span>(<span class="at">x =</span> enginesize, <span class="at">y =</span> price)) <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.8</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="03_regression_files/figure-html/unnamed-chunk-9-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="03_regression_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The p-value of enginesize is found to be <strong>5.00e-06</strong>, which is less than the arbitrary significance value <strong>(alpha = 0.05)</strong>. Therefore, enginesize is statistically significant.</p>
+</section>
+<section id="section-4" class="level1">
+<h1>5</h1>
+<ul>
+<li>Add a variable seat_heating to the data and assign a value TRUE for all observations. You can use e.g.&nbsp;df %&gt;% mutate(new_variable = value). Assign it to a new object and run a regression. What coefficient do you get for the new variable seat_heating and how can you explain it?</li>
+</ul>
+<div class="cell" data-hash="03_regression_cache/html/unnamed-chunk-10_ae622f8a6d585b687273574327f6965a">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>newCarPrices <span class="ot">&lt;-</span> carPrices <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">seat_heating=</span><span class="cn">TRUE</span>)</span>
+<span id="cb16-2"><a href="#cb16-2"></a><span class="fu">summary</span>(<span class="fu">lm</span>(price <span class="sc">~</span> ., <span class="at">data =</span> newCarPrices))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; 
+#&gt; Call:
+#&gt; lm(formula = price ~ ., data = newCarPrices)
+#&gt; 
+#&gt; Residuals:
+#&gt;    Min     1Q Median     3Q    Max 
+#&gt;  -5662  -1120      0    798   9040 
+#&gt; 
+#&gt; Coefficients: (1 not defined because of singularities)
+#&gt;                        Estimate Std. Error t value Pr(&gt;|t|)    
+#&gt; (Intercept)          -36269.965  15460.866  -2.346 0.020354 *  
+#&gt; aspirationturbo        1846.206   1041.391   1.773 0.078386 .  
+#&gt; doornumbertwo           242.523    571.929   0.424 0.672172    
+#&gt; carbodyhardtop        -3691.743   1424.825  -2.591 0.010561 *  
+#&gt; carbodyhatchback      -3344.335   1238.359  -2.701 0.007757 ** 
+#&gt; carbodysedan          -2292.820   1356.014  -1.691 0.093043 .  
+#&gt; carbodywagon          -3427.921   1490.285  -2.300 0.022885 *  
+#&gt; drivewheelfwd          -504.564   1076.623  -0.469 0.640030    
+#&gt; drivewheelrwd           -15.446   1268.070  -0.012 0.990299    
+#&gt; enginelocationrear     6643.492   2572.275   2.583 0.010806 *  
+#&gt; wheelbase               -30.197     92.776  -0.325 0.745294    
+#&gt; carlength               -29.740     51.672  -0.576 0.565824    
+#&gt; carwidth                731.819    244.533   2.993 0.003258 ** 
+#&gt; carheight               123.195    134.607   0.915 0.361617    
+#&gt; curbweight                2.612      1.781   1.467 0.144706    
+#&gt; enginetypedohcv       -8541.957   4749.685  -1.798 0.074219 .  
+#&gt; enginetypel             978.748   1786.384   0.548 0.584619    
+#&gt; enginetypeohc          3345.252    933.001   3.585 0.000461 ***
+#&gt; enginetypeohcf          972.919   1625.631   0.598 0.550462    
+#&gt; enginetypeohcv        -6222.322   1236.415  -5.033 1.43e-06 ***
+#&gt; cylindernumberfive   -11724.540   3019.192  -3.883 0.000157 ***
+#&gt; cylindernumberfour   -11549.326   3177.177  -3.635 0.000387 ***
+#&gt; cylindernumbersix     -7151.398   2247.230  -3.182 0.001793 ** 
+#&gt; cylindernumberthree   -4318.929   4688.833  -0.921 0.358545    
+#&gt; cylindernumbertwelve -11122.209   4196.494  -2.650 0.008946 ** 
+#&gt; enginesize              125.934     26.541   4.745 5.00e-06 ***
+#&gt; fuelsystem2bbl          177.136    883.615   0.200 0.841400    
+#&gt; fuelsystemmfi         -3041.018   2576.996  -1.180 0.239934    
+#&gt; fuelsystemmpfi          359.278   1001.529   0.359 0.720326    
+#&gt; fuelsystemspdi        -2543.890   1363.546  -1.866 0.064140 .  
+#&gt; fuelsystemspfi          514.766   2499.229   0.206 0.837107    
+#&gt; boreratio             -1306.740   1642.221  -0.796 0.427516    
+#&gt; stroke                -4527.137    922.732  -4.906 2.49e-06 ***
+#&gt; compressionratio       -737.901    555.960  -1.327 0.186539    
+#&gt; horsepower               10.293     22.709   0.453 0.651035    
+#&gt; peakrpm                   2.526      0.634   3.983 0.000108 ***
+#&gt; citympg                 -90.352    166.647  -0.542 0.588538    
+#&gt; highwaympg              154.858    167.148   0.926 0.355761    
+#&gt; seat_heatingTRUE             NA         NA      NA       NA    
+#&gt; ---
+#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#&gt; 
+#&gt; Residual standard error: 2189 on 143 degrees of freedom
+#&gt; Multiple R-squared:  0.9415, Adjusted R-squared:  0.9264 
+#&gt; F-statistic: 62.21 on 37 and 143 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p>The estimate for our newly added variable is found to be NA (not available). This is because the value is same for every observation and does not have any influence on the price of the car.</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -542,6 +1051,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
+<script>var lightboxQuarto = GLightbox({"openEffect":"zoom","selector":".lightbox","descPosition":"bottom","closeEffect":"zoom","loop":true});</script>
 
 
 
