@@ -2,6 +2,130 @@
 title: "Randomized Controlled Trials"
 ---
 
-::: callout-note
-You can delete everything in here and start fresh.
-:::
+```{r}
+#| include: false
+library(dplyr)
+library(tidyverse)
+```
+
+Load the dataset abtest_online.rds. It contains data about a randomized experiment run by an online shop. E-commerce websites frequently conduct numerous randomized experiments, commonly referred to as AB testing in a business context. In these experiments, a subset of randomly chosen website visitors is presented with a slightly altered version of the site, while others see the standard version. This approach enables the testing of new features, and the decision to implement a new feature is contingent on the outcomes derived from these tests.
+
+Consider this situation: You operate an online store and are concerned about the expenses associated with your customer service. To cut costs, you contemplate introducing a chatbot as a substitute for human customer service. However, you’re uncertain whether this change might have a detrimental impact on your sales. Consequently, you intend to conduct an AB test. In this test, a portion of users will be directed to a website equipped with a chatbot (treatment group), while the remaining customers will still interact with human customer service (control group) if they have questions. To ensure randomization, you’ll allocate the treatment based on the last digit of each user’s IP address.
+
+There are two outcome variables, purchase and purchase_amount. The first one shows whether a customer bought and the other how much (in €) he bought. First, let’s use purchase_amount.
+
+Other variables included are mobile_device being TRUE when a user visits the site using a mobile device and previous_visits indicating the number of previous visits of a particular user.
+
+After loading the data, perform the following steps:
+
+# 1
+* Check whether the covariates are balanced across the groups. Use a plot to show it.
+```{r}
+# reading the RDS file and print summary
+onlineShopData <- readRDS("../data/abtest_online.rds")
+summary(onlineShopData)
+```
+
+```{r}
+#  Plotting covariates to check if they are balanced across treatment and control groups
+compare_previous_visit <- 
+  ggplot(onlineShopData, 
+         aes(x = chatbot, 
+             y = previous_visit, 
+             color = as.factor(chatbot))) +
+  stat_summary(geom = "errorbar", 
+               width = .5,
+               fun.data = "mean_se", 
+               fun.args = list(mult=1.96),
+               show.legend = F) +
+  labs(x = NULL, y = "previous_visit", title = "Difference in previous_visit")
+
+compare_mobile_device <- 
+  ggplot(onlineShopData, 
+         aes(x = chatbot, 
+             y = mobile_device, 
+             color = as.factor(chatbot))) +
+  stat_summary(geom = "errorbar", 
+               width = .5,
+               fun.data = "mean_se", 
+               fun.args = list(mult=1.96),
+               show.legend = F) +
+  labs(x = NULL, y = "mobile_device", title = "Difference in mobile_device")
+
+compare_purchase <- 
+  ggplot(onlineShopData, 
+         aes(x = chatbot, 
+             y = purchase, 
+             color = as.factor(chatbot))) +
+  stat_summary(geom = "errorbar", 
+               width = .5,
+               fun.data = "mean_se", 
+               fun.args = list(mult=1.96),
+               show.legend = F) +
+  labs(x = NULL, y = "purchase", title = "Difference in purchase")
+
+compare_purchase_amount <- 
+  ggplot(onlineShopData, 
+         aes(x = chatbot, 
+             y = purchase_amount, 
+             color = as.factor(chatbot))) +
+  stat_summary(geom = "errorbar", 
+               width = .5,
+               fun.data = "mean_se", 
+               fun.args = list(mult=1.96),
+               show.legend = F) +
+  labs(x = NULL, y = "purchase_amount", title = "Difference in purchase_amount")
+
+compare_previous_visit
+compare_mobile_device
+compare_purchase
+compare_purchase_amount
+```
+
+We can also confirm that the covariates are almost balanced accross groups by calculating mean values.
+```{r}
+onlineShopData %>% 
+  group_by(chatbot) %>%
+  summarise(
+    mean_previous_visit = mean(previous_visit),
+    mean_mobile_device = mean(mobile_device),
+    mean_purchase = mean(purchase),
+    mean_purchase_amount = mean(purchase_amount)
+    )
+```
+
+# 2
+* Run a regression to find the effect of chatbot on sales.
+```{r}
+m1 = lm(purchase_amount ~ chatbot, data = onlineShopData)
+summary(m1)
+```
+
+We can also include other covariates in our regression model.
+```{r}
+m2 = lm(purchase_amount ~ chatbot + previous_visit + mobile_device, data = onlineShopData)
+summary(m2)
+```
+
+# 3
+* Find subgroup-specific effects by including an interaction. Compute a CATE for one exemplary group. A subgroup could be for example mobile users.
+```{r}
+m3 = lm(purchase_amount ~ chatbot * previous_visit + chatbot * mobile_device, data = onlineShopData)
+summary(m3)
+```
+
+CATE for chatbot and previous_visit subgroup is being calculated.
+```{r}
+# CATE(chatbot, previous_visit) = Intercept+chatbotTRUE+chatbotTRUE:previous_visit
+cate <- 17.2052 - 11.1064 + 2.0978
+cate
+```
+
+# 4
+* It’s not only of interest how much customers buy but also if the buy at all. Then, the dependent variable is binary (either 0 or 1) instead of continuous and the model of choice is the logistic regression. Use the outcome variable purchase and run a logistic regression. The coefficients are not as easily interpretable as before. Look it up and interpret the coefficient for chatbot.
+```{r}
+m4 = glm(purchase ~ chatbot, family=binomial(link='logit'), onlineShopData)
+summary(m4)
+```
+
+The estimate for chatbot is negative, which represents that having the chatbot is associated with a decrease in the log-odds of making a purchase. A decrease in log odds suggests a decrease in the likelihood of the event (purchase all).
