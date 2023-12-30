@@ -256,7 +256,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 #&gt;  Max.   :1.000   Max.   :81.35</code></pre>
 </div>
 </div>
-<div class="cell" data-hash="06_rct_cache/html/unnamed-chunk-3_c6e5dee6ff6c68cf914ad5143c24723a">
+<div class="cell" data-hash="06_rct_cache/html/unnamed-chunk-3_650c7e28e4faec0ae32b9d0fa95c700e">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="co">#  Plotting covariates to check if they are balanced across treatment and control groups</span></span>
 <span id="cb3-2"><a href="#cb3-2"></a>compare_previous_visit <span class="ot">&lt;-</span> </span>
 <span id="cb3-3"><a href="#cb3-3"></a>  <span class="fu">ggplot</span>(onlineShopData, </span>
@@ -282,31 +282,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb3-23"><a href="#cb3-23"></a>               <span class="at">show.legend =</span> F) <span class="sc">+</span></span>
 <span id="cb3-24"><a href="#cb3-24"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="st">"mobile_device"</span>, <span class="at">title =</span> <span class="st">"Difference in mobile_device"</span>)</span>
 <span id="cb3-25"><a href="#cb3-25"></a></span>
-<span id="cb3-26"><a href="#cb3-26"></a>compare_purchase <span class="ot">&lt;-</span> </span>
-<span id="cb3-27"><a href="#cb3-27"></a>  <span class="fu">ggplot</span>(onlineShopData, </span>
-<span id="cb3-28"><a href="#cb3-28"></a>         <span class="fu">aes</span>(<span class="at">x =</span> chatbot, </span>
-<span id="cb3-29"><a href="#cb3-29"></a>             <span class="at">y =</span> purchase, </span>
-<span id="cb3-30"><a href="#cb3-30"></a>             <span class="at">color =</span> <span class="fu">as.factor</span>(chatbot))) <span class="sc">+</span></span>
-<span id="cb3-31"><a href="#cb3-31"></a>  <span class="fu">stat_summary</span>(<span class="at">geom =</span> <span class="st">"errorbar"</span>, </span>
-<span id="cb3-32"><a href="#cb3-32"></a>               <span class="at">width =</span> .<span class="dv">5</span>,</span>
-<span id="cb3-33"><a href="#cb3-33"></a>               <span class="at">fun.data =</span> <span class="st">"mean_se"</span>, </span>
-<span id="cb3-34"><a href="#cb3-34"></a>               <span class="at">fun.args =</span> <span class="fu">list</span>(<span class="at">mult=</span><span class="fl">1.96</span>),</span>
-<span id="cb3-35"><a href="#cb3-35"></a>               <span class="at">show.legend =</span> F) <span class="sc">+</span></span>
-<span id="cb3-36"><a href="#cb3-36"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="st">"purchase"</span>, <span class="at">title =</span> <span class="st">"Difference in purchase"</span>)</span>
-<span id="cb3-37"><a href="#cb3-37"></a></span>
-<span id="cb3-38"><a href="#cb3-38"></a>compare_purchase_amount <span class="ot">&lt;-</span> </span>
-<span id="cb3-39"><a href="#cb3-39"></a>  <span class="fu">ggplot</span>(onlineShopData, </span>
-<span id="cb3-40"><a href="#cb3-40"></a>         <span class="fu">aes</span>(<span class="at">x =</span> chatbot, </span>
-<span id="cb3-41"><a href="#cb3-41"></a>             <span class="at">y =</span> purchase_amount, </span>
-<span id="cb3-42"><a href="#cb3-42"></a>             <span class="at">color =</span> <span class="fu">as.factor</span>(chatbot))) <span class="sc">+</span></span>
-<span id="cb3-43"><a href="#cb3-43"></a>  <span class="fu">stat_summary</span>(<span class="at">geom =</span> <span class="st">"errorbar"</span>, </span>
-<span id="cb3-44"><a href="#cb3-44"></a>               <span class="at">width =</span> .<span class="dv">5</span>,</span>
-<span id="cb3-45"><a href="#cb3-45"></a>               <span class="at">fun.data =</span> <span class="st">"mean_se"</span>, </span>
-<span id="cb3-46"><a href="#cb3-46"></a>               <span class="at">fun.args =</span> <span class="fu">list</span>(<span class="at">mult=</span><span class="fl">1.96</span>),</span>
-<span id="cb3-47"><a href="#cb3-47"></a>               <span class="at">show.legend =</span> F) <span class="sc">+</span></span>
-<span id="cb3-48"><a href="#cb3-48"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="cn">NULL</span>, <span class="at">y =</span> <span class="st">"purchase_amount"</span>, <span class="at">title =</span> <span class="st">"Difference in purchase_amount"</span>)</span>
-<span id="cb3-49"><a href="#cb3-49"></a></span>
-<span id="cb3-50"><a href="#cb3-50"></a>compare_previous_visit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-26"><a href="#cb3-26"></a>compare_previous_visit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
@@ -322,38 +298,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </figure>
 </div>
 </div>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>compare_purchase</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><a href="06_rct_files/figure-html/unnamed-chunk-3-3.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img src="06_rct_files/figure-html/unnamed-chunk-3-3.png" class="img-fluid figure-img" width="672"></a></p>
-</figure>
 </div>
-</div>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>compare_purchase_amount</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><a href="06_rct_files/figure-html/unnamed-chunk-3-4.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img src="06_rct_files/figure-html/unnamed-chunk-3-4.png" class="img-fluid figure-img" width="672"></a></p>
-</figure>
-</div>
-</div>
-</div>
-<p>We can also confirm that the covariates are almost balanced accross groups by calculating mean values.</p>
-<div class="cell" data-hash="06_rct_cache/html/unnamed-chunk-4_af3ed48d2be12cbbac488f66a20b765b">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>onlineShopData <span class="sc">%&gt;%</span> </span>
-<span id="cb7-2"><a href="#cb7-2"></a>  <span class="fu">group_by</span>(chatbot) <span class="sc">%&gt;%</span></span>
-<span id="cb7-3"><a href="#cb7-3"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb7-4"><a href="#cb7-4"></a>    <span class="at">mean_previous_visit =</span> <span class="fu">mean</span>(previous_visit),</span>
-<span id="cb7-5"><a href="#cb7-5"></a>    <span class="at">mean_mobile_device =</span> <span class="fu">mean</span>(mobile_device),</span>
-<span id="cb7-6"><a href="#cb7-6"></a>    <span class="at">mean_purchase =</span> <span class="fu">mean</span>(purchase),</span>
-<span id="cb7-7"><a href="#cb7-7"></a>    <span class="at">mean_purchase_amount =</span> <span class="fu">mean</span>(purchase_amount)</span>
-<span id="cb7-8"><a href="#cb7-8"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>We can also confirm that the covariates are almost balanced across groups by calculating mean values.</p>
+<div class="cell" data-hash="06_rct_cache/html/unnamed-chunk-4_b7c31628a0eb1ea231f98d0e997fa42a">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>onlineShopData <span class="sc">%&gt;%</span> </span>
+<span id="cb5-2"><a href="#cb5-2"></a>  <span class="fu">group_by</span>(chatbot) <span class="sc">%&gt;%</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb5-4"><a href="#cb5-4"></a>    <span class="at">mean_previous_visit =</span> <span class="fu">mean</span>(previous_visit),</span>
+<span id="cb5-5"><a href="#cb5-5"></a>    <span class="at">mean_mobile_device =</span> <span class="fu">mean</span>(mobile_device),</span>
+<span id="cb5-6"><a href="#cb5-6"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 
 <div data-pagedtable="false">
   <script data-pagedtable-source="" type="application/json">
-{"columns":[{"label":["chatbot"],"name":[1],"type":["lgl"],"align":["right"]},{"label":["mean_previous_visit"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["mean_mobile_device"],"name":[3],"type":["dbl"],"align":["right"]},{"label":["mean_purchase"],"name":[4],"type":["dbl"],"align":["right"]},{"label":["mean_purchase_amount"],"name":[5],"type":["dbl"],"align":["right"]}],"data":[{"1":"FALSE","2":"2.169355","3":"0.3185484","4":"0.4959677","5":"16.701681"},{"1":"TRUE","2":"1.875000","3":"0.3154762","4":"0.2678571","5":"9.626129"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
+{"columns":[{"label":["chatbot"],"name":[1],"type":["lgl"],"align":["right"]},{"label":["mean_previous_visit"],"name":[2],"type":["dbl"],"align":["right"]},{"label":["mean_mobile_device"],"name":[3],"type":["dbl"],"align":["right"]}],"data":[{"1":"FALSE","2":"2.169355","3":"0.3185484"},{"1":"TRUE","2":"1.875000","3":"0.3154762"}],"options":{"columns":{"min":{},"max":[10]},"rows":{"min":[10],"max":[10]},"pages":{}}}
   </script>
 </div>
 </div>
@@ -365,8 +323,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Run a regression to find the effect of chatbot on sales.</li>
 </ul>
 <div class="cell" data-hash="06_rct_cache/html/unnamed-chunk-5_87a12aa313527bf1216dfaf79ede5307">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>m1 <span class="ot">=</span> <span class="fu">lm</span>(purchase_amount <span class="sc">~</span> chatbot, <span class="at">data =</span> onlineShopData)</span>
-<span id="cb8-2"><a href="#cb8-2"></a><span class="fu">summary</span>(m1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>m1 <span class="ot">=</span> <span class="fu">lm</span>(purchase_amount <span class="sc">~</span> chatbot, <span class="at">data =</span> onlineShopData)</span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="fu">summary</span>(m1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt; Call:
@@ -390,8 +348,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>We can also include other covariates in our regression model.</p>
 <div class="cell" data-hash="06_rct_cache/html/unnamed-chunk-6_58ccf24029f87a81035c82db585f3cd5">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>m2 <span class="ot">=</span> <span class="fu">lm</span>(purchase_amount <span class="sc">~</span> chatbot <span class="sc">+</span> previous_visit <span class="sc">+</span> mobile_device, <span class="at">data =</span> onlineShopData)</span>
-<span id="cb10-2"><a href="#cb10-2"></a><span class="fu">summary</span>(m2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>m2 <span class="ot">=</span> <span class="fu">lm</span>(purchase_amount <span class="sc">~</span> chatbot <span class="sc">+</span> previous_visit <span class="sc">+</span> mobile_device, <span class="at">data =</span> onlineShopData)</span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="fu">summary</span>(m2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt; Call:
@@ -423,8 +381,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Find subgroup-specific effects by including an interaction. Compute a CATE for one exemplary group. A subgroup could be for example mobile users.</li>
 </ul>
 <div class="cell" data-hash="06_rct_cache/html/unnamed-chunk-7_a658abb6bd536d00801d527f4ddaf939">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>m3 <span class="ot">=</span> <span class="fu">lm</span>(purchase_amount <span class="sc">~</span> chatbot <span class="sc">*</span> previous_visit <span class="sc">+</span> chatbot <span class="sc">*</span> mobile_device, <span class="at">data =</span> onlineShopData)</span>
-<span id="cb12-2"><a href="#cb12-2"></a><span class="fu">summary</span>(m3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>m3 <span class="ot">=</span> <span class="fu">lm</span>(purchase_amount <span class="sc">~</span> chatbot <span class="sc">*</span> previous_visit <span class="sc">+</span> chatbot <span class="sc">*</span> mobile_device, <span class="at">data =</span> onlineShopData)</span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="fu">summary</span>(m3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt; Call:
@@ -453,9 +411,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>CATE for chatbot and previous_visit subgroup is being calculated.</p>
 <div class="cell" data-hash="06_rct_cache/html/unnamed-chunk-8_28644f4b522c81438e3b60cf8dcf1120">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="co"># CATE(chatbot, previous_visit) = Intercept+chatbotTRUE+chatbotTRUE:previous_visit</span></span>
-<span id="cb14-2"><a href="#cb14-2"></a>cate <span class="ot">&lt;-</span> <span class="fl">17.2052</span> <span class="sc">-</span> <span class="fl">11.1064</span> <span class="sc">+</span> <span class="fl">2.0978</span></span>
-<span id="cb14-3"><a href="#cb14-3"></a>cate</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="co"># CATE(chatbot, previous_visit) = Intercept+chatbotTRUE+chatbotTRUE:previous_visit</span></span>
+<span id="cb12-2"><a href="#cb12-2"></a>cate <span class="ot">&lt;-</span> <span class="fl">17.2052</span> <span class="sc">-</span> <span class="fl">11.1064</span> <span class="sc">+</span> <span class="fl">2.0978</span></span>
+<span id="cb12-3"><a href="#cb12-3"></a>cate</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#&gt; [1] 8.1966</code></pre>
 </div>
@@ -467,8 +425,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>It’s not only of interest how much customers buy but also if the buy at all. Then, the dependent variable is binary (either 0 or 1) instead of continuous and the model of choice is the logistic regression. Use the outcome variable purchase and run a logistic regression. The coefficients are not as easily interpretable as before. Look it up and interpret the coefficient for chatbot.</li>
 </ul>
 <div class="cell" data-hash="06_rct_cache/html/unnamed-chunk-9_e01fcb62a91b256fba728ba7dd746fe8">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a>m4 <span class="ot">=</span> <span class="fu">glm</span>(purchase <span class="sc">~</span> chatbot, <span class="at">family=</span><span class="fu">binomial</span>(<span class="at">link=</span><span class="st">'logit'</span>), onlineShopData)</span>
-<span id="cb16-2"><a href="#cb16-2"></a><span class="fu">summary</span>(m4)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>m4 <span class="ot">=</span> <span class="fu">glm</span>(purchase <span class="sc">~</span> chatbot, <span class="at">family=</span><span class="fu">binomial</span>(<span class="at">link=</span><span class="st">'logit'</span>), onlineShopData)</span>
+<span id="cb14-2"><a href="#cb14-2"></a><span class="fu">summary</span>(m4)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#&gt; 
 #&gt; Call:
@@ -846,7 +804,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
-<script>var lightboxQuarto = GLightbox({"closeEffect":"zoom","loop":true,"openEffect":"zoom","descPosition":"bottom","selector":".lightbox"});</script>
+<script>var lightboxQuarto = GLightbox({"loop":true,"openEffect":"zoom","selector":".lightbox","descPosition":"bottom","closeEffect":"zoom"});</script>
 
 
 

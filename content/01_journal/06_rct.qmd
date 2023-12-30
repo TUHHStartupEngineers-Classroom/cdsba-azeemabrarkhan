@@ -52,45 +52,17 @@ compare_mobile_device <-
                show.legend = F) +
   labs(x = NULL, y = "mobile_device", title = "Difference in mobile_device")
 
-compare_purchase <- 
-  ggplot(onlineShopData, 
-         aes(x = chatbot, 
-             y = purchase, 
-             color = as.factor(chatbot))) +
-  stat_summary(geom = "errorbar", 
-               width = .5,
-               fun.data = "mean_se", 
-               fun.args = list(mult=1.96),
-               show.legend = F) +
-  labs(x = NULL, y = "purchase", title = "Difference in purchase")
-
-compare_purchase_amount <- 
-  ggplot(onlineShopData, 
-         aes(x = chatbot, 
-             y = purchase_amount, 
-             color = as.factor(chatbot))) +
-  stat_summary(geom = "errorbar", 
-               width = .5,
-               fun.data = "mean_se", 
-               fun.args = list(mult=1.96),
-               show.legend = F) +
-  labs(x = NULL, y = "purchase_amount", title = "Difference in purchase_amount")
-
 compare_previous_visit
 compare_mobile_device
-compare_purchase
-compare_purchase_amount
 ```
 
-We can also confirm that the covariates are almost balanced accross groups by calculating mean values.
+We can also confirm that the covariates are almost balanced across groups by calculating mean values.
 ```{r}
 onlineShopData %>% 
   group_by(chatbot) %>%
   summarise(
     mean_previous_visit = mean(previous_visit),
     mean_mobile_device = mean(mobile_device),
-    mean_purchase = mean(purchase),
-    mean_purchase_amount = mean(purchase_amount)
     )
 ```
 
