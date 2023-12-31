@@ -190,6 +190,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul class="collapse">
   <li><a href="#section" id="toc-section" class="nav-link active" data-scroll-target="#section">1</a></li>
+  <li><a href="#section-1" id="toc-section-1" class="nav-link" data-scroll-target="#section-1">2</a></li>
   </ul>
 </nav>
     </div>
@@ -286,8 +287,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <pre><code>#&gt; [1] 0.08123456</code></pre>
 </div>
 </div>
-<p>#2 Using a linear regression to compute the estimate. Also, include group and time fixed effects in the regression, i.e.&nbsp;one regressor for each month and one regressor for each hospital: Consider, whether you want to include them as</p>
-<p>month + hospital or as as.factor(month) + as.factor(hospital)</p>
+</section>
+<section id="section-1" class="level1">
+<h1>2</h1>
+<p>Using a linear regression to compute the estimate. Also, include group and time fixed effects in the regression, i.e.&nbsp;one regressor for each month and one regressor for each hospital: Consider, whether you want to include them as</p>
+<p>month + hospital or as<br>
+as.factor(month) + as.factor(hospital)</p>
 <p>and explain what the difference is.</p>
 <div class="cell" data-hash="08_did_cache/html/unnamed-chunk-4_df73de162c15580557e0f2d1805703b5">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">summary</span>(<span class="fu">lm</span>(satis <span class="sc">~</span> procedure<span class="sc">*</span>after <span class="sc">+</span> hospital <span class="sc">+</span> month, <span class="at">data =</span> df))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>

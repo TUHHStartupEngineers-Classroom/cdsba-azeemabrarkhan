@@ -58,10 +58,10 @@ did <- diff_after - diff_before
 did
 ```
 
-#2 
+# 2 
 Using a linear regression to compute the estimate. Also, include group and time fixed effects in the regression, i.e. one regressor for each month and one regressor for each hospital: Consider, whether you want to include them as
 
-month + hospital or as
+month + hospital or as  
 as.factor(month) + as.factor(hospital)
 
 and explain what the difference is.
