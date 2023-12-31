@@ -2,6 +2,70 @@
 title: "Difference-in-Differences"
 ---
 
-::: callout-note
-You can delete everything in here and start fresh.
-:::
+```{r}
+#| include: false
+library(dplyr)
+library(tidyverse)
+```
+
+Imagine, you are manager of a large health provider that manages many hospitals and you want to test how a new admission procedure affects patient satisfaction. You randomly selected 18 hospitals that introduced the new admission procedure and compare them to 28 other hospitals that did not introduce the method. For both groups of hospitals you collected data from before and after the introduction. The data you have collected is from patient surveys where they were asked how satisfied they are.
+
+Load the data from the file hospdd.rds1. Then, perform a difference-in-differences analysis by
+
+# 1
+* Manually computing the mean satisfaction for treated and control hospitals before and after the treatment. Helpful functions could be filter(), pull() and basic arithmetic operations.
+
+```{r}
+# reading the RDS file and print summary
+df <- readRDS("../data/hospdd.rds")
+summary(df)
+```
+
+```{r}
+df <- df %>% filter(month %in% 4:5) %>% mutate(after = ifelse(month > 4, 1, 0))
+
+before_control <- df %>%
+  filter(procedure == 0, after == 0) %>%
+  summarise(mean_satis = mean(satis, na.rm = TRUE)) %>% 
+  pull(mean_satis)
+
+before_treatment <- df %>%
+  filter(procedure == 1, after == 0) %>%
+  summarise(mean_satis = mean(satis, na.rm = TRUE)) %>% 
+  pull(mean_satis)
+
+diff_before <- before_treatment - before_control
+
+after_control <- df %>%
+  filter(procedure == 0, after == 1) %>%
+  summarise(mean_satis = mean(satis, na.rm = TRUE)) %>% 
+  pull(mean_satis)
+
+after_treatment <- df %>%
+  filter(procedure == 1, after == 1) %>%
+  summarise(mean_satis = mean(satis, na.rm = TRUE)) %>% 
+  pull(mean_satis)
+
+diff_after <- after_treatment - after_control
+
+did <- diff_after - diff_before
+did
+```
+
+#2 
+Using a linear regression to compute the estimate. Also, include group and time fixed effects in the regression, i.e. one regressor for each month and one regressor for each hospital: Consider, whether you want to include them as
+
+month + hospital or as
+as.factor(month) + as.factor(hospital)
+
+and explain what the difference is.
+
+```{r}
+summary(lm(satis ~ procedure*after + hospital + month, data = df))
+```
+
+```{r}
+summary(lm(satis ~ procedure*after + as.factor(month) + as.factor(hospital), data = df))
+```
+
+When the hospital id and month are added as factors we get individual estimates for every month and hospital, whereas, when they are added normally, they are treated as numeric values and could produce erroneous results.
