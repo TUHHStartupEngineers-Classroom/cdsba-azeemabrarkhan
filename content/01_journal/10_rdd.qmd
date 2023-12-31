@@ -2,6 +2,134 @@
 title: "Regression Discontinuity"
 ---
 
-::: callout-note
-You can delete everything in here and start fresh.
-:::
+```{r}
+#| include: false
+library(dplyr)
+library(tidyverse)
+library(ggplot2)
+library(rddensity)
+```
+
+# 1
+For the first assignment, use the data from the just discussed application (coupon.rds). When conducting a regression discontinuity design, one parameter that is chosen somehow arbitrarily is the bandwidth. Check how sensitive the result is to changing the bandwidth by running the analysis
+
+```{r}
+# reading the RDS file and print summary
+df <- readRDS("../data/coupon.rds")
+summary(df)
+```
+
+## with half the bandwidth
+```{r}
+c0 <- 60
+half_bw <- c0 + c(-2.5, 2.5)
+
+# Subsets below and above threshold in specified half-bandwidth
+df_half_bw_below <- df %>% filter(days_since_last >= half_bw[1] & days_since_last < c0)
+df_half_bw_above <- df %>% filter(days_since_last >= c0 & days_since_last <= half_bw[2])
+
+df_half_bw <- bind_rows(df_half_bw_above, df_half_bw_below)
+dim(df_half_bw)
+
+model_half_bw_below <- lm(purchase_after ~ days_since_last, df_half_bw_below)
+model_half_bw_above <- lm(purchase_after ~ days_since_last, df_half_bw_above)
+
+y0 <- predict(model_half_bw_below, tibble(days_since_last = c0))
+y1 <- predict(model_half_bw_above, tibble(days_since_last = c0))
+
+late <- y1 - y0
+sprintf("LATE: %.2f", late)
+```
+
+```{r}
+lm_half_bw <- lm(purchase_after ~ days_since_last_centered + coupon, df_half_bw)
+summary(lm_half_bw)
+```
+
+## with double the bandwidth
+```{r}
+c0 <- 60
+double_bw <- c0 + c(-10, 10)
+
+# Subsets below and above threshold in specified double-bandwidth
+df_double_bw_below <- df %>% filter(days_since_last >= double_bw[1] & days_since_last < c0)
+df_double_bw_above <- df %>% filter(days_since_last >= c0 & days_since_last <= double_bw[2])
+
+df_double_bw <- bind_rows(df_double_bw_above, df_double_bw_below)
+dim(df_double_bw)
+
+model_double_bw_below <- lm(purchase_after ~ days_since_last, df_double_bw_below)
+model_double_bw_above <- lm(purchase_after ~ days_since_last, df_double_bw_above)
+
+y0 <- predict(model_double_bw_below, tibble(days_since_last = c0))
+y1 <- predict(model_double_bw_above, tibble(days_since_last = c0))
+
+late <- y1 - y0
+sprintf("LATE: %.2f", late)
+```
+
+```{r}
+lm_double_bw <- lm(purchase_after ~ days_since_last_centered + coupon, df_double_bw)
+summary(lm_double_bw)
+```
+
+The number of observation units reduces to almost half in number with half of the bandwidth, whereas, number of units almost doubles when we use twice of the bandwidth.
+
+# 2
+Now consider a different past campaign. For a limited amount of time, for purchases with a total amount of more than 30€ you offered free shipping. The data can be seen in shipping.rds. Have a look at the variable purchase_amount and argue whether it could generally be used as a running variable with a cut-off at 30€.
+
+Use a plot to confirm your argument.
+
+```{r}
+# reading the RDS file and print summary
+df <- readRDS("../data/shipping.rds")
+summary(df)
+
+# consider 30 as cut-off and add a Boolean for free-shipping
+c0 <- 30
+df <- df %>% mutate(free_shipping = ifelse(purchase_amount > c0, TRUE, FALSE))
+```
+
+```{r}
+# Scatter plot shows the availability of units before and after the cutoff line of 30
+
+ggplot(df, aes(x = purchase_amount, y = free_shipping, color = free_shipping)) +
+  geom_point(alpha = 0.2, position = position_jitter()) +
+  guides(scale = "none") +
+  scale_y_discrete(labels = c("No free shipping", "Free shipping"))+
+  scale_color_discrete(labels = c("No free shippinng", "Free shipping")) +
+  xlab("Purchase amount") +
+  ylab("") +
+  theme(legend.position = "none")
+
+```
+
+```{r}
+# To confirm no heaping at cut-off, plot histogram
+# As a sudden change can be seen after cutoff, therefore
+# continuity assumption does not hold.
+
+  ggplot(df, aes(x = purchase_amount, fill = free_shipping)) +
+  geom_histogram(binwidth = 4, color = "white", boundary = c0, alpha = .6) +
+  scale_fill_discrete(labels = c("No free shippinng", "Free shipping")) +
+  xlab("Purchase amount") +
+  ylab("Number of free shippings") +
+  theme(legend.title = element_blank())
+```
+
+```{r}
+# To check the continuity assumption more thoroughly,
+# calculate p-value using rddensity library.
+
+# As p=0.5 is greater than arbitrary value (0.05), continuity assumption does not hold.
+
+rddd <- rddensity::rddensity(df$purchase_amount, c = c0)
+summary(rddd)
+```
+
+```{r}
+# Visually check continuity at running variable
+rdd_plot <- rddensity::rdplotdensity(rddd, df$purchase_amount, plotN = 100)
+```
+
+As continuity assumption does not hold, purchase_amount variable is not suitable to be used as a running variable.
