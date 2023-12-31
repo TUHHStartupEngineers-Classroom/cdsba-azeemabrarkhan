@@ -22,6 +22,12 @@ summary(df)
 ```
 
 ```{r}
+# considering month 4 to be before the induction of new admission procedure,
+# because it is the earliest month which has procedure = 1
+
+# considering month 5 to be after the induction of new admission procedure
+
+# Filter out month 4 and 5 and add a new variable 'after'
 df <- df %>% filter(month %in% 4:5) %>% mutate(after = ifelse(month > 4, 1, 0))
 
 before_control <- df %>%

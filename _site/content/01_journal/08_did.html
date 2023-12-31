@@ -247,35 +247,41 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 #&gt;  Max.   :9.7129</code></pre>
 </div>
 </div>
-<div class="cell" data-hash="08_did_cache/html/unnamed-chunk-3_4aced2c4fc37a0e101cfb0840fa594aa">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> <span class="fu">filter</span>(month <span class="sc">%in%</span> <span class="dv">4</span><span class="sc">:</span><span class="dv">5</span>) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">after =</span> <span class="fu">ifelse</span>(month <span class="sc">&gt;</span> <span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">0</span>))</span>
-<span id="cb3-2"><a href="#cb3-2"></a></span>
-<span id="cb3-3"><a href="#cb3-3"></a>before_control <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
-<span id="cb3-4"><a href="#cb3-4"></a>  <span class="fu">filter</span>(procedure <span class="sc">==</span> <span class="dv">0</span>, after <span class="sc">==</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb3-5"><a href="#cb3-5"></a>  <span class="fu">summarise</span>(<span class="at">mean_satis =</span> <span class="fu">mean</span>(satis, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb3-6"><a href="#cb3-6"></a>  <span class="fu">pull</span>(mean_satis)</span>
-<span id="cb3-7"><a href="#cb3-7"></a></span>
-<span id="cb3-8"><a href="#cb3-8"></a>before_treatment <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
-<span id="cb3-9"><a href="#cb3-9"></a>  <span class="fu">filter</span>(procedure <span class="sc">==</span> <span class="dv">1</span>, after <span class="sc">==</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb3-10"><a href="#cb3-10"></a>  <span class="fu">summarise</span>(<span class="at">mean_satis =</span> <span class="fu">mean</span>(satis, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb3-11"><a href="#cb3-11"></a>  <span class="fu">pull</span>(mean_satis)</span>
-<span id="cb3-12"><a href="#cb3-12"></a></span>
-<span id="cb3-13"><a href="#cb3-13"></a>diff_before <span class="ot">&lt;-</span> before_treatment <span class="sc">-</span> before_control</span>
-<span id="cb3-14"><a href="#cb3-14"></a></span>
-<span id="cb3-15"><a href="#cb3-15"></a>after_control <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
-<span id="cb3-16"><a href="#cb3-16"></a>  <span class="fu">filter</span>(procedure <span class="sc">==</span> <span class="dv">0</span>, after <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb3-17"><a href="#cb3-17"></a>  <span class="fu">summarise</span>(<span class="at">mean_satis =</span> <span class="fu">mean</span>(satis, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb3-18"><a href="#cb3-18"></a>  <span class="fu">pull</span>(mean_satis)</span>
-<span id="cb3-19"><a href="#cb3-19"></a></span>
-<span id="cb3-20"><a href="#cb3-20"></a>after_treatment <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
-<span id="cb3-21"><a href="#cb3-21"></a>  <span class="fu">filter</span>(procedure <span class="sc">==</span> <span class="dv">1</span>, after <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb3-22"><a href="#cb3-22"></a>  <span class="fu">summarise</span>(<span class="at">mean_satis =</span> <span class="fu">mean</span>(satis, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span> </span>
-<span id="cb3-23"><a href="#cb3-23"></a>  <span class="fu">pull</span>(mean_satis)</span>
-<span id="cb3-24"><a href="#cb3-24"></a></span>
-<span id="cb3-25"><a href="#cb3-25"></a>diff_after <span class="ot">&lt;-</span> after_treatment <span class="sc">-</span> after_control</span>
-<span id="cb3-26"><a href="#cb3-26"></a></span>
-<span id="cb3-27"><a href="#cb3-27"></a>did <span class="ot">&lt;-</span> diff_after <span class="sc">-</span> diff_before</span>
-<span id="cb3-28"><a href="#cb3-28"></a>did</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-hash="08_did_cache/html/unnamed-chunk-3_2ab9ebdcdeab52a7c465d0ec421ca99c">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># considering month 4 to be before the induction of new admission procedure,</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="co"># because it is the earliest month which has procedure = 1</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="co"># considering month 5 to be after the induction of new admission procedure</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a></span>
+<span id="cb3-6"><a href="#cb3-6"></a><span class="co"># Filter out month 4 and 5 and add a new variable 'after'</span></span>
+<span id="cb3-7"><a href="#cb3-7"></a>df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> <span class="fu">filter</span>(month <span class="sc">%in%</span> <span class="dv">4</span><span class="sc">:</span><span class="dv">5</span>) <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">after =</span> <span class="fu">ifelse</span>(month <span class="sc">&gt;</span> <span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">0</span>))</span>
+<span id="cb3-8"><a href="#cb3-8"></a></span>
+<span id="cb3-9"><a href="#cb3-9"></a>before_control <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb3-10"><a href="#cb3-10"></a>  <span class="fu">filter</span>(procedure <span class="sc">==</span> <span class="dv">0</span>, after <span class="sc">==</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-11"><a href="#cb3-11"></a>  <span class="fu">summarise</span>(<span class="at">mean_satis =</span> <span class="fu">mean</span>(satis, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-12"><a href="#cb3-12"></a>  <span class="fu">pull</span>(mean_satis)</span>
+<span id="cb3-13"><a href="#cb3-13"></a></span>
+<span id="cb3-14"><a href="#cb3-14"></a>before_treatment <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb3-15"><a href="#cb3-15"></a>  <span class="fu">filter</span>(procedure <span class="sc">==</span> <span class="dv">1</span>, after <span class="sc">==</span> <span class="dv">0</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-16"><a href="#cb3-16"></a>  <span class="fu">summarise</span>(<span class="at">mean_satis =</span> <span class="fu">mean</span>(satis, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-17"><a href="#cb3-17"></a>  <span class="fu">pull</span>(mean_satis)</span>
+<span id="cb3-18"><a href="#cb3-18"></a></span>
+<span id="cb3-19"><a href="#cb3-19"></a>diff_before <span class="ot">&lt;-</span> before_treatment <span class="sc">-</span> before_control</span>
+<span id="cb3-20"><a href="#cb3-20"></a></span>
+<span id="cb3-21"><a href="#cb3-21"></a>after_control <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb3-22"><a href="#cb3-22"></a>  <span class="fu">filter</span>(procedure <span class="sc">==</span> <span class="dv">0</span>, after <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-23"><a href="#cb3-23"></a>  <span class="fu">summarise</span>(<span class="at">mean_satis =</span> <span class="fu">mean</span>(satis, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-24"><a href="#cb3-24"></a>  <span class="fu">pull</span>(mean_satis)</span>
+<span id="cb3-25"><a href="#cb3-25"></a></span>
+<span id="cb3-26"><a href="#cb3-26"></a>after_treatment <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span></span>
+<span id="cb3-27"><a href="#cb3-27"></a>  <span class="fu">filter</span>(procedure <span class="sc">==</span> <span class="dv">1</span>, after <span class="sc">==</span> <span class="dv">1</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb3-28"><a href="#cb3-28"></a>  <span class="fu">summarise</span>(<span class="at">mean_satis =</span> <span class="fu">mean</span>(satis, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)) <span class="sc">%&gt;%</span> </span>
+<span id="cb3-29"><a href="#cb3-29"></a>  <span class="fu">pull</span>(mean_satis)</span>
+<span id="cb3-30"><a href="#cb3-30"></a></span>
+<span id="cb3-31"><a href="#cb3-31"></a>diff_after <span class="ot">&lt;-</span> after_treatment <span class="sc">-</span> after_control</span>
+<span id="cb3-32"><a href="#cb3-32"></a></span>
+<span id="cb3-33"><a href="#cb3-33"></a>did <span class="ot">&lt;-</span> diff_after <span class="sc">-</span> diff_before</span>
+<span id="cb3-34"><a href="#cb3-34"></a>did</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#&gt; [1] 0.08123456</code></pre>
 </div>
