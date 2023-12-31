@@ -2,6 +2,89 @@
 title: "Instrumental Variables"
 ---
 
-::: callout-note
-You can delete everything in here and start fresh.
-:::
+```{r}
+#| include: false
+library(dplyr)
+library(tidyverse)
+library(ggplot2)
+library(dagitty)
+library(ggdag)
+library(estimatr)
+```
+
+Imagine the following situation: you have developed an app and you are already having an active user base. Of course, some users are more active than other users. Also, users might use the app for different purposes. In general, user behavior likely depends on a lot of unobserved characteristics.
+
+Obviously, your goal is to keep users as long as possible on the app to maximize your ad revenues. To do that, you want to introduce a new feature and see how it affects time spent on the app. Simply comparing users who use the newly introduced feature to users who don’t would result in a biased estimate due to the unobserved confounders regarding their activity and willingness to use a new feature.
+
+Therefore, you perform a so called randomized encouragement trial, where for a random selection of users, a popup appears when opening the app and encourages these users to test new feature. The users who are not randomly selected don’t get a popup message but could also use the new feature.
+
+After a while you collect data on users’ activity and also if they were encouraged and if they used the new feature. To see the data, load rand_enc.rds. Do the following steps:
+
+```{r}
+# reading the RDS file and print summary
+df <- readRDS("../data/rand_enc.rds")
+summary(df)
+```
+
+# 1
+* Draw a DAG of how you understand the relationships.
+```{r}
+# Define DAG
+dag_model <- 'dag {
+  bb="0,0,1,1"
+  "Random popup" [pos="0,0"]
+  "Use New Feature" [exposure, pos="1,0"]
+  "Time Spent" [outcome, pos="2,0"]
+  "Unobserved Confounders" [pos="1.5,1"]
+  "Use New Feature" -> "Time Spent"
+  "Random popup" -> "Use New Feature"
+  "Unobserved Confounders" -> "Time Spent"
+  "Unobserved Confounders" -> "Use New Feature"
+}'
+
+# draw DAG
+ggdag_status(dag_model) +
+  guides(color = "none") +  # Turn off legend
+  theme_dag_gray()+
+  geom_dag_text(color = "black") +
+  geom_dag_edges(edge_color = "black")
+```
+
+# 2
+* Compute the naive, biased estimate.
+```{r}
+model_naive <- lm(time_spent ~ used_ftr, data = df)
+summary(model_naive)
+```
+
+# 3
+* For the assumptions that can be (partly) tested, check whether they are satisfied by either computing correlations or drawing plots. Argue whether instrumental variable estimation is an adequate procedure.
+``` {r}
+cor(df) %>% round(2)
+```
+We can see some positive coorelation between the instrumental variable (rand_enc) and exposure (used_ftr). As both are binary quantities, the scatter plot will not represent any useful information as shown below.
+```{r}
+  ggplot(df, aes(x = rand_enc, y = used_ftr)) +
+  geom_point() +
+  labs(x = "rand_enc 1", y = "used_ftr 2", title = "Scatter Plot of rand_enc and used_ftr") +
+  theme_minimal()
+```
+# 4
+* Compute the IV estimate using 2SLS and compare it to the naive estimate. Would you consider the naive estimate biased, and if yes, does it have an upward or downward bias?
+
+```{r}
+# Calculating manually
+first_stage <- lm(used_ftr ~ rand_enc, data = df)
+summary(first_stage)
+
+second_stage <- lm(df$time_spent ~ first_stage$fitted.values)
+summary(second_stage)
+```
+
+```{r}
+# using estimatr library
+model_iv <- estimatr::iv_robust(time_spent ~ used_ftr | rand_enc, data = df)
+summary(model_iv)
+```
+
+The estimate for used_ftr is 10.82269 and is upward biased because of unobserved confounders as compared to iv estimate of 9.7382
