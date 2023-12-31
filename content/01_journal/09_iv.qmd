@@ -87,4 +87,4 @@ model_iv <- estimatr::iv_robust(time_spent ~ used_ftr | rand_enc, data = df)
 summary(model_iv)
 ```
 
-The estimate for used_ftr is 10.82269 and is upward biased because of unobserved confounders as compared to iv estimate of 9.7382
+The estimate for used_ftr is 10.82269 in case of naive estimation and is upward biased because of unobserved confounders as compared to iv estimate of 9.7382
