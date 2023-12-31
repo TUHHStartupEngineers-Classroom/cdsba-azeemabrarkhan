@@ -19,7 +19,7 @@ library(ggdag)
 # D = No. of parking spots as exposure
 # Y = Sales
 
-store_parking_model <- 'dag {
+dag_model <- 'dag {
 bb="0,0,1,1"
 Z [pos="0.5,0.5"]
 D [exposure,pos="0,0"]
@@ -30,7 +30,7 @@ D -> Y
 }
 '
 # draw DAG
-ggdag_status(store_parking_model) +
+ggdag_status(dag_model) +
   theme_dag_gray()+
   geom_dag_edges(edge_color = "black")
 ```
@@ -42,24 +42,24 @@ The location of the store can effect both the number of available parking spots 
 
 ```{r}
 # find all paths
-paths(store_parking_model)
+paths(dag_model)
 ```
 There are 2 paths and both are open
 
 ```{r}
 # plot individual paths
-ggdag_paths(store_parking_model) +
+ggdag_paths(dag_model) +
   theme_dag_gray()
 ```
 
 ```{r}
 # find all nodes that need to be adjusted
-adjustmentSets(store_parking_model)
+adjustmentSets(dag_model)
 ```
 Node-Z must be adjusted as it is acting as a confounder.
 
 ```{r}
-ggdag_adjustment_set(store_parking_model, shadow = T) +
+ggdag_adjustment_set(dag_model, shadow = T) +
   theme_dag_gray() +
   geom_dag_edges(edge_color = "black")
 ```

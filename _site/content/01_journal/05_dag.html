@@ -230,12 +230,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <ul>
 <li>Think about example from previous chapter (parking spots) and draw the DAG.</li>
 </ul>
-<div class="cell" data-hash="05_dag_cache/html/unnamed-chunk-2_9f19e480a270934a8ac0ff99168bb45f">
+<div class="cell" data-hash="05_dag_cache/html/unnamed-chunk-2_38ca05a4615a32cfe7327462e34e2062">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># Z = location of the store</span></span>
 <span id="cb1-2"><a href="#cb1-2"></a><span class="co"># D = No. of parking spots as exposure</span></span>
 <span id="cb1-3"><a href="#cb1-3"></a><span class="co"># Y = Sales</span></span>
 <span id="cb1-4"><a href="#cb1-4"></a></span>
-<span id="cb1-5"><a href="#cb1-5"></a>store_parking_model <span class="ot">&lt;-</span> <span class="st">'dag {</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a>dag_model <span class="ot">&lt;-</span> <span class="st">'dag {</span></span>
 <span id="cb1-6"><a href="#cb1-6"></a><span class="st">bb="0,0,1,1"</span></span>
 <span id="cb1-7"><a href="#cb1-7"></a><span class="st">Z [pos="0.5,0.5"]</span></span>
 <span id="cb1-8"><a href="#cb1-8"></a><span class="st">D [exposure,pos="0,0"]</span></span>
@@ -246,7 +246,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-13"><a href="#cb1-13"></a><span class="st">}</span></span>
 <span id="cb1-14"><a href="#cb1-14"></a><span class="st">'</span></span>
 <span id="cb1-15"><a href="#cb1-15"></a><span class="co"># draw DAG</span></span>
-<span id="cb1-16"><a href="#cb1-16"></a><span class="fu">ggdag_status</span>(store_parking_model) <span class="sc">+</span></span>
+<span id="cb1-16"><a href="#cb1-16"></a><span class="fu">ggdag_status</span>(dag_model) <span class="sc">+</span></span>
 <span id="cb1-17"><a href="#cb1-17"></a>  <span class="fu">theme_dag_gray</span>()<span class="sc">+</span></span>
 <span id="cb1-18"><a href="#cb1-18"></a>  <span class="fu">geom_dag_edges</span>(<span class="at">edge_color =</span> <span class="st">"black"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -261,9 +261,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 D = No.&nbsp;of parking spots as an exposure<br>
 Y = Sales as an outcome</p>
 <p>The location of the store can effect both the number of available parking spots and sales. Stores in the city center might be subjected to more sales but with no parking spots, whereas, stores outside the city center might have low sales but with available parking spots. Location is acting as a confounder here.</p>
-<div class="cell" data-hash="05_dag_cache/html/unnamed-chunk-3_3c6771daf7e5a7de80ac7a7c90c28ce5">
+<div class="cell" data-hash="05_dag_cache/html/unnamed-chunk-3_74e9d64d74fea1ffa076ada15681fefb">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># find all paths</span></span>
-<span id="cb2-2"><a href="#cb2-2"></a><span class="fu">paths</span>(store_parking_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="fu">paths</span>(dag_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#&gt; $paths
 #&gt; [1] "D -&gt; Y"      "D &lt;- Z -&gt; Y"
@@ -273,9 +273,9 @@ Y = Sales as an outcome</p>
 </div>
 </div>
 <p>There are 2 paths and both are open</p>
-<div class="cell" data-hash="05_dag_cache/html/unnamed-chunk-4_db89d04159f50e0fa2158654d9adf62b">
+<div class="cell" data-hash="05_dag_cache/html/unnamed-chunk-4_525083f7d1b21c02139d0de884bc2b55">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># plot individual paths</span></span>
-<span id="cb4-2"><a href="#cb4-2"></a><span class="fu">ggdag_paths</span>(store_parking_model) <span class="sc">+</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="fu">ggdag_paths</span>(dag_model) <span class="sc">+</span></span>
 <span id="cb4-3"><a href="#cb4-3"></a>  <span class="fu">theme_dag_gray</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -285,16 +285,16 @@ Y = Sales as an outcome</p>
 </div>
 </div>
 </div>
-<div class="cell" data-hash="05_dag_cache/html/unnamed-chunk-5_c85acfebc534cce46a016247c6300b56">
+<div class="cell" data-hash="05_dag_cache/html/unnamed-chunk-5_8a7ae5b531d4c8825a6f0e90ec185070">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># find all nodes that need to be adjusted</span></span>
-<span id="cb5-2"><a href="#cb5-2"></a><span class="fu">adjustmentSets</span>(store_parking_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="fu">adjustmentSets</span>(dag_model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>#&gt; { Z }</code></pre>
 </div>
 </div>
 <p>Node-Z must be adjusted as it is acting as a confounder.</p>
-<div class="cell" data-hash="05_dag_cache/html/unnamed-chunk-6_029b47d355f8ef638bcec22cfeffc575">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="fu">ggdag_adjustment_set</span>(store_parking_model, <span class="at">shadow =</span> T) <span class="sc">+</span></span>
+<div class="cell" data-hash="05_dag_cache/html/unnamed-chunk-6_20494e7ed187911fb542701e72bbfda0">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="fu">ggdag_adjustment_set</span>(dag_model, <span class="at">shadow =</span> T) <span class="sc">+</span></span>
 <span id="cb7-2"><a href="#cb7-2"></a>  <span class="fu">theme_dag_gray</span>() <span class="sc">+</span></span>
 <span id="cb7-3"><a href="#cb7-3"></a>  <span class="fu">geom_dag_edges</span>(<span class="at">edge_color =</span> <span class="st">"black"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
@@ -784,7 +784,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
-<script>var lightboxQuarto = GLightbox({"descPosition":"bottom","openEffect":"zoom","loop":true,"selector":".lightbox","closeEffect":"zoom"});</script>
+<script>var lightboxQuarto = GLightbox({"selector":".lightbox","closeEffect":"zoom","loop":true,"descPosition":"bottom","openEffect":"zoom"});</script>
 
 
 

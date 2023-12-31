@@ -2,6 +2,135 @@
 title: "Matching and Subclassification"
 ---
 
-::: callout-note
-You can delete everything in here and start fresh.
-:::
+```{r}
+#| include: false
+library(dplyr)
+library(tidyverse)
+library(ggplot2)
+library(dagitty)
+library(ggdag)
+library(MatchIt)
+```
+
+Imagine, the following situation. You are running an online store and one year ago, you introduced a plus membership to bind customers to your store and increase revenue. The plus memberships comes at a small cost for the customers, which is why not all of the customers subscribed. Now you want to examine whether binding customers by this membership program in fact increases your sales with subscribed customers. But of course, there are potentially confounding variables such as age, sex or pre_avg_purch (previous average purchases).
+
+Load the data membership.rds. Then,
+
+# 1
+* Check the relationships between the variables and draw a DAG as you understand the relations.
+```{r}
+# reading the RDS file and print summary
+df <- readRDS("../data/membership.rds")
+summary(df)
+```
+
+```{r}
+# Define DAG
+dag_model <- 'dag {
+  bb="0,0,1,1"
+  "Card" [exposure,pos="0,2"]
+  "Previous avergage purchase" [pos="0.25,2"]
+  "Average purchase" [outcome,pos="0.5,2"]
+  "Age" [pos="0.25,4"]
+  "Sex" [pos="0.25,0"]
+  
+  "Previous avergage purchase" -> "Average purchase"
+  "Previous avergage purchase" -> "Card"
+  "Age" -> "Card"
+  "Age" -> "Previous avergage purchase"
+  "Age" -> "Average purchase"
+  "Sex" -> "Card"
+  "Sex" -> "Previous avergage purchase"
+  "Sex" -> "Average purchase"
+}'
+
+# DAG with adjustment sets (and custom layout)
+ggdag_adjustment_set(dag_model, shadow = T, text = F) +
+  guides(color = "none") +  # Turn off legend
+  theme_dag_gray()+
+  geom_dag_text(color = NA) +
+  geom_dag_edges(edge_color = "black") +
+  geom_dag_label_repel(aes(label = name))
+```
+
+# 2
+* Compute a naive estimate of the average treatment effect.
+
+``` {r}
+df %>%
+  group_by(as.logical(card)) %>%
+  summarise(mean_value = mean(avg_purch)) %>%
+  mutate(mean_difference = diff(mean_value))
+```
+
+``` {r}
+# Another representation
+mean(df[df$card==1, ]$avg_purch) - mean(df[df$card==0, ]$avg_purch)
+```
+
+``` {r}
+# We can also build a naive model
+
+model_naive <- lm(avg_purch ~ card, data = df)
+summary(model_naive)
+```
+
+# 3
+Use the following matching methods to obtain more precise estimates
+
+## (Coarsened) Exact Matching
+
+```{r}
+cem <- matchit(card ~ age + sex + pre_avg_purch,
+               data = df, 
+               method = 'cem', 
+               estimand = 'ATE')
+summary(cem)
+```
+
+```{r}
+df_cem <- match.data(cem)
+model_cem <- lm(avg_purch ~ card, data = df_cem, weights = weights)
+summary(model_cem)
+```
+
+## Nearest-Neighbor Matching
+
+```{r}
+nn <- matchit(card ~ age + sex + pre_avg_purch,
+              data = df,
+              method = "nearest",
+              distance = "mahalanobis",
+              replace = T)
+summary(nn)
+```
+
+```{r}
+df_nn <- match.data(nn)
+
+model_nn <- lm(avg_purch ~ card, data = df_nn, weights = weights)
+summary(model_nn)
+```
+
+## Inverse Probability Weighting
+
+```{r}
+model_prop <- glm(card ~ age + sex + pre_avg_purch,
+                  data = df,
+                  family = binomial(link = "logit"))
+summary(model_prop)
+```
+
+```{r}
+# Add propensities to table
+df_aug <- df %>% mutate(propensity = predict(model_prop, type = "response"))
+# 
+df_ipw <- df_aug %>% mutate(ipw = (card/propensity) + ((1-card) / (1-propensity)))
+```
+
+```{r}
+model_ipw <- lm(avg_purch ~ card,
+                data = df_ipw, 
+                weights = ipw)
+summary(model_ipw)
+```
