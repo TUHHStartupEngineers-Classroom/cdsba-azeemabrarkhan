@@ -6,7 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Oliver Mork">
+<meta name="author" content="Azeem Abrar Khan">
 
 <title>MyLabJournal - Regression Discontinuity</title>
 <style>
@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -43,6 +77,9 @@ ul.task-list li input[type="checkbox"] {
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
 <link href="../../site_libs/bootstrap/bootstrap-dark.min.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script src="../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -63,6 +100,9 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+
+<link href="../../site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+<script src="../../site_libs/pagedtable-1.1/js/pagedtable.js"></script>
 
 
 </head>
@@ -148,7 +188,18 @@ ul.task-list li input[type="checkbox"] {
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul class="collapse">
+  <li><a href="#section" id="toc-section" class="nav-link active" data-scroll-target="#section">1</a>
+  <ul class="collapse">
+  <li><a href="#with-half-the-bandwidth" id="toc-with-half-the-bandwidth" class="nav-link" data-scroll-target="#with-half-the-bandwidth">with half the bandwidth</a></li>
+  <li><a href="#with-double-the-bandwidth" id="toc-with-double-the-bandwidth" class="nav-link" data-scroll-target="#with-double-the-bandwidth">with double the bandwidth</a></li>
+  </ul></li>
+  <li><a href="#section-1" id="toc-section-1" class="nav-link" data-scroll-target="#section-1">2</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -165,7 +216,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Author</div>
     <div class="quarto-title-meta-contents">
-             <p>Oliver Mork </p>
+             <p>Azeem Abrar Khan </p>
           </div>
   </div>
     
@@ -176,21 +227,257 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
+<section id="section" class="level1">
+<h1>1</h1>
+<p>For the first assignment, use the data from the just discussed application (coupon.rds). When conducting a regression discontinuity design, one parameter that is chosen somehow arbitrarily is the bandwidth. Check how sensitive the result is to changing the bandwidth by running the analysis</p>
+<div class="cell" data-hash="10_rdd_cache/html/unnamed-chunk-2_b272f70e51a6dba07d8248160f764003">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># reading the RDS file and print summary</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a>df <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"../data/coupon.rds"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="fu">summary</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt;  days_since_last  days_since_last_centered   coupon        purchase_after   
+#&gt;  Min.   :  1.00   Min.   :-59.00           Mode :logical   Min.   :-0.8649  
+#&gt;  1st Qu.: 14.07   1st Qu.:-45.92           FALSE:3854      1st Qu.:10.3311  
+#&gt;  Median : 30.60   Median :-29.40           TRUE :1146      Median :13.3817  
+#&gt;  Mean   : 39.72   Mean   :-20.28                           Mean   :14.4752  
+#&gt;  3rd Qu.: 57.10   3rd Qu.: -2.90                           3rd Qu.:18.3075  
+#&gt;  Max.   :210.00   Max.   :150.00                           Max.   :46.7593</code></pre>
 </div>
-<div class="callout-title-container flex-fill">
-Note
+</div>
+<section id="with-half-the-bandwidth" class="level2">
+<h2 class="anchored" data-anchor-id="with-half-the-bandwidth">with half the bandwidth</h2>
+<div class="cell" data-hash="10_rdd_cache/html/unnamed-chunk-3_e8eeac513e7c73f2fcd5f10a2f105eea">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>c0 <span class="ot">&lt;-</span> <span class="dv">60</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a>half_bw <span class="ot">&lt;-</span> c0 <span class="sc">+</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">2.5</span>, <span class="fl">2.5</span>)</span>
+<span id="cb3-3"><a href="#cb3-3"></a></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="co"># Subsets below and above threshold in specified half-bandwidth</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a>df_half_bw_below <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> <span class="fu">filter</span>(days_since_last <span class="sc">&gt;=</span> half_bw[<span class="dv">1</span>] <span class="sc">&amp;</span> days_since_last <span class="sc">&lt;</span> c0)</span>
+<span id="cb3-6"><a href="#cb3-6"></a>df_half_bw_above <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> <span class="fu">filter</span>(days_since_last <span class="sc">&gt;=</span> c0 <span class="sc">&amp;</span> days_since_last <span class="sc">&lt;=</span> half_bw[<span class="dv">2</span>])</span>
+<span id="cb3-7"><a href="#cb3-7"></a></span>
+<span id="cb3-8"><a href="#cb3-8"></a>df_half_bw <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(df_half_bw_above, df_half_bw_below)</span>
+<span id="cb3-9"><a href="#cb3-9"></a><span class="fu">dim</span>(df_half_bw)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; [1] 181   4</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>model_half_bw_below <span class="ot">&lt;-</span> <span class="fu">lm</span>(purchase_after <span class="sc">~</span> days_since_last, df_half_bw_below)</span>
+<span id="cb5-2"><a href="#cb5-2"></a>model_half_bw_above <span class="ot">&lt;-</span> <span class="fu">lm</span>(purchase_after <span class="sc">~</span> days_since_last, df_half_bw_above)</span>
+<span id="cb5-3"><a href="#cb5-3"></a></span>
+<span id="cb5-4"><a href="#cb5-4"></a>y0 <span class="ot">&lt;-</span> <span class="fu">predict</span>(model_half_bw_below, <span class="fu">tibble</span>(<span class="at">days_since_last =</span> c0))</span>
+<span id="cb5-5"><a href="#cb5-5"></a>y1 <span class="ot">&lt;-</span> <span class="fu">predict</span>(model_half_bw_above, <span class="fu">tibble</span>(<span class="at">days_since_last =</span> c0))</span>
+<span id="cb5-6"><a href="#cb5-6"></a></span>
+<span id="cb5-7"><a href="#cb5-7"></a>late <span class="ot">&lt;-</span> y1 <span class="sc">-</span> y0</span>
+<span id="cb5-8"><a href="#cb5-8"></a><span class="fu">sprintf</span>(<span class="st">"LATE: %.2f"</span>, late)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; [1] "LATE: 7.36"</code></pre>
 </div>
 </div>
-<div class="callout-body-container callout-body">
-<p>You can delete everything in here and start fresh.</p>
+<div class="cell" data-hash="10_rdd_cache/html/unnamed-chunk-4_0894bb64742f4704f507da0a5e23653a">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>lm_half_bw <span class="ot">&lt;-</span> <span class="fu">lm</span>(purchase_after <span class="sc">~</span> days_since_last_centered <span class="sc">+</span> coupon, df_half_bw)</span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="fu">summary</span>(lm_half_bw)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; 
+#&gt; Call:
+#&gt; lm(formula = purchase_after ~ days_since_last_centered + coupon, 
+#&gt;     data = df_half_bw)
+#&gt; 
+#&gt; Residuals:
+#&gt;      Min       1Q   Median       3Q      Max 
+#&gt; -10.9680  -2.2013   0.1676   2.1516   8.2567 
+#&gt; 
+#&gt; Coefficients:
+#&gt;                          Estimate Std. Error t value Pr(&gt;|t|)    
+#&gt; (Intercept)               11.6612     0.5747  20.292  &lt; 2e-16 ***
+#&gt; days_since_last_centered   0.6883     0.3219   2.138   0.0339 *  
+#&gt; couponTRUE                 7.1679     1.0172   7.047 3.87e-11 ***
+#&gt; ---
+#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#&gt; 
+#&gt; Residual standard error: 3.289 on 178 degrees of freedom
+#&gt; Multiple R-squared:  0.6622, Adjusted R-squared:  0.6584 
+#&gt; F-statistic: 174.5 on 2 and 178 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
+</section>
+<section id="with-double-the-bandwidth" class="level2">
+<h2 class="anchored" data-anchor-id="with-double-the-bandwidth">with double the bandwidth</h2>
+<div class="cell" data-hash="10_rdd_cache/html/unnamed-chunk-5_1ddc8ef8cef4077fc9d31dd1064e2983">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>c0 <span class="ot">&lt;-</span> <span class="dv">60</span></span>
+<span id="cb9-2"><a href="#cb9-2"></a>double_bw <span class="ot">&lt;-</span> c0 <span class="sc">+</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">10</span>, <span class="dv">10</span>)</span>
+<span id="cb9-3"><a href="#cb9-3"></a></span>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="co"># Subsets below and above threshold in specified double-bandwidth</span></span>
+<span id="cb9-5"><a href="#cb9-5"></a>df_double_bw_below <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> <span class="fu">filter</span>(days_since_last <span class="sc">&gt;=</span> double_bw[<span class="dv">1</span>] <span class="sc">&amp;</span> days_since_last <span class="sc">&lt;</span> c0)</span>
+<span id="cb9-6"><a href="#cb9-6"></a>df_double_bw_above <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> <span class="fu">filter</span>(days_since_last <span class="sc">&gt;=</span> c0 <span class="sc">&amp;</span> days_since_last <span class="sc">&lt;=</span> double_bw[<span class="dv">2</span>])</span>
+<span id="cb9-7"><a href="#cb9-7"></a></span>
+<span id="cb9-8"><a href="#cb9-8"></a>df_double_bw <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(df_double_bw_above, df_double_bw_below)</span>
+<span id="cb9-9"><a href="#cb9-9"></a><span class="fu">dim</span>(df_double_bw)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; [1] 629   4</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>model_double_bw_below <span class="ot">&lt;-</span> <span class="fu">lm</span>(purchase_after <span class="sc">~</span> days_since_last, df_double_bw_below)</span>
+<span id="cb11-2"><a href="#cb11-2"></a>model_double_bw_above <span class="ot">&lt;-</span> <span class="fu">lm</span>(purchase_after <span class="sc">~</span> days_since_last, df_double_bw_above)</span>
+<span id="cb11-3"><a href="#cb11-3"></a></span>
+<span id="cb11-4"><a href="#cb11-4"></a>y0 <span class="ot">&lt;-</span> <span class="fu">predict</span>(model_double_bw_below, <span class="fu">tibble</span>(<span class="at">days_since_last =</span> c0))</span>
+<span id="cb11-5"><a href="#cb11-5"></a>y1 <span class="ot">&lt;-</span> <span class="fu">predict</span>(model_double_bw_above, <span class="fu">tibble</span>(<span class="at">days_since_last =</span> c0))</span>
+<span id="cb11-6"><a href="#cb11-6"></a></span>
+<span id="cb11-7"><a href="#cb11-7"></a>late <span class="ot">&lt;-</span> y1 <span class="sc">-</span> y0</span>
+<span id="cb11-8"><a href="#cb11-8"></a><span class="fu">sprintf</span>(<span class="st">"LATE: %.2f"</span>, late)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; [1] "LATE: 9.51"</code></pre>
+</div>
+</div>
+<div class="cell" data-hash="10_rdd_cache/html/unnamed-chunk-6_5a5c9b9ce548fb870b96179cad05b068">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>lm_double_bw <span class="ot">&lt;-</span> <span class="fu">lm</span>(purchase_after <span class="sc">~</span> days_since_last_centered <span class="sc">+</span> coupon, df_double_bw)</span>
+<span id="cb13-2"><a href="#cb13-2"></a><span class="fu">summary</span>(lm_double_bw)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; 
+#&gt; Call:
+#&gt; lm(formula = purchase_after ~ days_since_last_centered + coupon, 
+#&gt;     data = df_double_bw)
+#&gt; 
+#&gt; Residuals:
+#&gt;      Min       1Q   Median       3Q      Max 
+#&gt; -12.2718  -2.0858  -0.0003   2.0275  10.6749 
+#&gt; 
+#&gt; Coefficients:
+#&gt;                          Estimate Std. Error t value Pr(&gt;|t|)    
+#&gt; (Intercept)              10.61700    0.27386  38.767   &lt;2e-16 ***
+#&gt; days_since_last_centered  0.01413    0.04255   0.332     0.74    
+#&gt; couponTRUE                9.51584    0.48628  19.569   &lt;2e-16 ***
+#&gt; ---
+#&gt; Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+#&gt; 
+#&gt; Residual standard error: 3.115 on 626 degrees of freedom
+#&gt; Multiple R-squared:  0.7052, Adjusted R-squared:  0.7042 
+#&gt; F-statistic: 748.6 on 2 and 626 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p>The number of observation units reduces to almost half in number with half of the bandwidth, whereas, number of units almost doubles when we use twice of the bandwidth.</p>
+</section>
+</section>
+<section id="section-1" class="level1">
+<h1>2</h1>
+<p>Now consider a different past campaign. For a limited amount of time, for purchases with a total amount of more than 30€ you offered free shipping. The data can be seen in shipping.rds. Have a look at the variable purchase_amount and argue whether it could generally be used as a running variable with a cut-off at 30€.</p>
+<p>Use a plot to confirm your argument.</p>
+<div class="cell" data-hash="10_rdd_cache/html/unnamed-chunk-7_cdd6c37dff873d254d5bc58fb6aa9073">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="co"># reading the RDS file and print summary</span></span>
+<span id="cb15-2"><a href="#cb15-2"></a>df <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">"../data/shipping.rds"</span>)</span>
+<span id="cb15-3"><a href="#cb15-3"></a><span class="fu">summary</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt;  purchase_amount 
+#&gt;  Min.   :  1.00  
+#&gt;  1st Qu.: 13.75  
+#&gt;  Median : 31.94  
+#&gt;  Mean   : 35.06  
+#&gt;  3rd Qu.: 49.59  
+#&gt;  Max.   :150.00</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="co"># consider 30 as cut-off and add a Boolean for free-shipping</span></span>
+<span id="cb17-2"><a href="#cb17-2"></a>c0 <span class="ot">&lt;-</span> <span class="dv">30</span></span>
+<span id="cb17-3"><a href="#cb17-3"></a>df <span class="ot">&lt;-</span> df <span class="sc">%&gt;%</span> <span class="fu">mutate</span>(<span class="at">free_shipping =</span> <span class="fu">ifelse</span>(purchase_amount <span class="sc">&gt;</span> c0, <span class="cn">TRUE</span>, <span class="cn">FALSE</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-hash="10_rdd_cache/html/unnamed-chunk-8_70eb6f723f9658d6946aaf35e5d6ac50">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="co"># Scatter plot shows the availability of units before and after the cutoff line of 30</span></span>
+<span id="cb18-2"><a href="#cb18-2"></a></span>
+<span id="cb18-3"><a href="#cb18-3"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> purchase_amount, <span class="at">y =</span> free_shipping, <span class="at">color =</span> free_shipping)) <span class="sc">+</span></span>
+<span id="cb18-4"><a href="#cb18-4"></a>  <span class="fu">geom_point</span>(<span class="at">alpha =</span> <span class="fl">0.2</span>, <span class="at">position =</span> <span class="fu">position_jitter</span>()) <span class="sc">+</span></span>
+<span id="cb18-5"><a href="#cb18-5"></a>  <span class="fu">guides</span>(<span class="at">scale =</span> <span class="st">"none"</span>) <span class="sc">+</span></span>
+<span id="cb18-6"><a href="#cb18-6"></a>  <span class="fu">scale_y_discrete</span>(<span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"No free shipping"</span>, <span class="st">"Free shipping"</span>))<span class="sc">+</span></span>
+<span id="cb18-7"><a href="#cb18-7"></a>  <span class="fu">scale_color_discrete</span>(<span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"No free shippinng"</span>, <span class="st">"Free shipping"</span>)) <span class="sc">+</span></span>
+<span id="cb18-8"><a href="#cb18-8"></a>  <span class="fu">xlab</span>(<span class="st">"Purchase amount"</span>) <span class="sc">+</span></span>
+<span id="cb18-9"><a href="#cb18-9"></a>  <span class="fu">ylab</span>(<span class="st">""</span>) <span class="sc">+</span></span>
+<span id="cb18-10"><a href="#cb18-10"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"none"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="10_rdd_files/figure-html/unnamed-chunk-8-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="10_rdd_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell" data-hash="10_rdd_cache/html/unnamed-chunk-9_3d0ca6138f3a245ca323f0cfa7e7aeab">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="co"># To confirm no heaping at cut-off, plot histogram</span></span>
+<span id="cb19-2"><a href="#cb19-2"></a><span class="co"># As a sudden change can be seen after cutoff, therefore</span></span>
+<span id="cb19-3"><a href="#cb19-3"></a><span class="co"># continuity assumption does not hold.</span></span>
+<span id="cb19-4"><a href="#cb19-4"></a></span>
+<span id="cb19-5"><a href="#cb19-5"></a>  <span class="fu">ggplot</span>(df, <span class="fu">aes</span>(<span class="at">x =</span> purchase_amount, <span class="at">fill =</span> free_shipping)) <span class="sc">+</span></span>
+<span id="cb19-6"><a href="#cb19-6"></a>  <span class="fu">geom_histogram</span>(<span class="at">binwidth =</span> <span class="dv">4</span>, <span class="at">color =</span> <span class="st">"white"</span>, <span class="at">boundary =</span> c0, <span class="at">alpha =</span> .<span class="dv">6</span>) <span class="sc">+</span></span>
+<span id="cb19-7"><a href="#cb19-7"></a>  <span class="fu">scale_fill_discrete</span>(<span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"No free shippinng"</span>, <span class="st">"Free shipping"</span>)) <span class="sc">+</span></span>
+<span id="cb19-8"><a href="#cb19-8"></a>  <span class="fu">xlab</span>(<span class="st">"Purchase amount"</span>) <span class="sc">+</span></span>
+<span id="cb19-9"><a href="#cb19-9"></a>  <span class="fu">ylab</span>(<span class="st">"Number of free shippings"</span>) <span class="sc">+</span></span>
+<span id="cb19-10"><a href="#cb19-10"></a>  <span class="fu">theme</span>(<span class="at">legend.title =</span> <span class="fu">element_blank</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="10_rdd_files/figure-html/unnamed-chunk-9-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="10_rdd_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell" data-hash="10_rdd_cache/html/unnamed-chunk-10_516aa472cfacc38005a2611e4b412d45">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="co"># To check the continuity assumption more thoroughly,</span></span>
+<span id="cb20-2"><a href="#cb20-2"></a><span class="co"># calculate p-value using rddensity library.</span></span>
+<span id="cb20-3"><a href="#cb20-3"></a></span>
+<span id="cb20-4"><a href="#cb20-4"></a><span class="co"># As p=0.5 is greater than arbitrary value (0.05), continuity assumption does not hold.</span></span>
+<span id="cb20-5"><a href="#cb20-5"></a></span>
+<span id="cb20-6"><a href="#cb20-6"></a>rddd <span class="ot">&lt;-</span> rddensity<span class="sc">::</span><span class="fu">rddensity</span>(df<span class="sc">$</span>purchase_amount, <span class="at">c =</span> c0)</span>
+<span id="cb20-7"><a href="#cb20-7"></a><span class="fu">summary</span>(rddd)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; 
+#&gt; Manipulation testing using local polynomial density estimation.
+#&gt; 
+#&gt; Number of obs =       6666
+#&gt; Model =               unrestricted
+#&gt; Kernel =              triangular
+#&gt; BW method =           estimated
+#&gt; VCE method =          jackknife
+#&gt; 
+#&gt; c = 30                Left of c           Right of c          
+#&gt; Number of obs         3088                3578                
+#&gt; Eff. Number of obs    2221                1955                
+#&gt; Order est. (p)        2                   2                   
+#&gt; Order bias (q)        3                   3                   
+#&gt; BW est. (h)           22.909              20.394              
+#&gt; 
+#&gt; Method                T                   P &gt; |T|             
+#&gt; Robust                5.9855              0</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>#&gt; Warning in summary.CJMrddensity(rddd): There are repeated observations. Point
+#&gt; estimates and standard errors have been adjusted. Use option massPoints=FALSE
+#&gt; to suppress this feature.</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>#&gt; 
+#&gt; P-values of binomial tests (H0: p=0.5).
+#&gt; 
+#&gt; Window Length / 2          &lt;c     &gt;=c    P&gt;|T|
+#&gt; 0.261                      20      26    0.4614
+#&gt; 0.522                      41      65    0.0250
+#&gt; 0.783                      62     107    0.0007
+#&gt; 1.043                      81     136    0.0002
+#&gt; 1.304                     100     169    0.0000
+#&gt; 1.565                     114     196    0.0000
+#&gt; 1.826                     132     227    0.0000
+#&gt; 2.087                     156     263    0.0000
+#&gt; 2.348                     173     298    0.0000
+#&gt; 2.609                     191     331    0.0000</code></pre>
+</div>
+</div>
+<div class="cell" data-hash="10_rdd_cache/html/unnamed-chunk-11_2979ae52ac92c5562ade1d197f5d09ee">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a><span class="co"># Visually check continuity at running variable</span></span>
+<span id="cb24-2"><a href="#cb24-2"></a>rdd_plot <span class="ot">&lt;-</span> rddensity<span class="sc">::</span><span class="fu">rdplotdensity</span>(rddd, df<span class="sc">$</span>purchase_amount, <span class="at">plotN =</span> <span class="dv">100</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="10_rdd_files/figure-html/unnamed-chunk-11-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img src="10_rdd_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<p>As continuity assumption does not hold, purchase_amount variable is not suitable to be used as a running variable.</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -542,6 +829,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
+<script>var lightboxQuarto = GLightbox({"descPosition":"bottom","openEffect":"zoom","selector":".lightbox","closeEffect":"zoom","loop":true});</script>
 
 
 

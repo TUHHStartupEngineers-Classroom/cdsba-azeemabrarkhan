@@ -21,6 +21,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -43,6 +77,9 @@ ul.task-list li input[type="checkbox"] {
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
 <link href="../../site_libs/bootstrap/bootstrap-dark.min.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script src="../../site_libs/quarto-contrib/glightbox/glightbox.min.js"></script>
+<link href="../../site_libs/quarto-contrib/glightbox/glightbox.min.css" rel="stylesheet">
+<link href="../../site_libs/quarto-contrib/glightbox/lightbox.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -63,6 +100,9 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+
+<link href="../../site_libs/pagedtable-1.1/css/pagedtable.css" rel="stylesheet">
+<script src="../../site_libs/pagedtable-1.1/js/pagedtable.js"></script>
 
 
 </head>
@@ -148,7 +188,18 @@ ul.task-list li input[type="checkbox"] {
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Contents</h2>
+   
+  <ul class="collapse">
+  <li><a href="#causes-of-spurious-correlation" id="toc-causes-of-spurious-correlation" class="nav-link active" data-scroll-target="#causes-of-spurious-correlation">Causes of spurious correlation</a>
+  <ul class="collapse">
+  <li><a href="#confounding-variables" id="toc-confounding-variables" class="nav-link" data-scroll-target="#confounding-variables">Confounding Variables</a></li>
+  <li><a href="#mediating-variables" id="toc-mediating-variables" class="nav-link" data-scroll-target="#mediating-variables">Mediating Variables</a></li>
+  <li><a href="#random-sampling-error" id="toc-random-sampling-error" class="nav-link" data-scroll-target="#random-sampling-error">Random Sampling Error</a></li>
+  </ul></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -176,21 +227,102 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<div class="callout callout-style-default callout-note callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
+<section id="causes-of-spurious-correlation" class="level1">
+<h1>Causes of spurious correlation</h1>
+<p>Spurious correlation can either be because of: * Confounding Variables * Mediating Variables * Random Sampling Error</p>
+<section id="confounding-variables" class="level2">
+<h2 class="anchored" data-anchor-id="confounding-variables">Confounding Variables</h2>
+<p>A change in one variable causes change in other two variables which are not dependent on one another, thus creating spurious correlation between the two variables.</p>
+<p>(A -&gt; B) change in A causes change in B</p>
+<p>(A -&gt; C) change in A causes change in C</p>
+<p>This would seem like B causes change in C, which is not true.</p>
+<p>Assume there is an ice cream shop at the beach and this beach is also subjected to shark attacks. When there are more people at the beach, there will be more ice cream sales and increased number of shark attacks.</p>
+<p>A -&gt; Number of people, B -&gt; Ice cream sales and C -&gt; Number of shark attacks</p>
+<div class="cell" data-hash="04_causality_cache/html/unnamed-chunk-2_94c844a918ddaaf102b9feae15556a5c">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>numPeople <span class="ot">&lt;-</span> <span class="dv">250</span><span class="sc">:</span><span class="dv">1000</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a>iceCreamSales <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="fl">0.8</span><span class="sc">*</span>numPeople<span class="sc">+</span><span class="fu">rnorm</span>(<span class="dv">751</span>, <span class="dv">0</span>, <span class="dv">30</span>))</span>
+<span id="cb1-3"><a href="#cb1-3"></a>numsharkAttacks <span class="ot">&lt;-</span> <span class="fu">round</span>((<span class="dv">5</span><span class="sc">/</span><span class="dv">250</span>)<span class="sc">*</span>numPeople<span class="sc">+</span><span class="fu">rnorm</span>(<span class="dv">751</span>, <span class="dv">1</span>, <span class="dv">1</span>))</span>
+<span id="cb1-4"><a href="#cb1-4"></a>iceCreamSalesAndSharkAttacks <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">numPeople =</span> <span class="dv">250</span><span class="sc">:</span><span class="dv">1000</span>, iceCreamSales, numsharkAttacks)</span>
+<span id="cb1-5"><a href="#cb1-5"></a></span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="fu">ggplot</span>(iceCreamSalesAndSharkAttacks, <span class="fu">aes</span>(<span class="at">x =</span> numPeople, <span class="at">y =</span> iceCreamSales)) <span class="sc">+</span></span>
+<span id="cb1-7"><a href="#cb1-7"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"blue"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="04_causality_files/figure-html/unnamed-chunk-2-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-1"><img src="04_causality_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
 </div>
-<div class="callout-title-container flex-fill">
-Note
+</div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="fu">ggplot</span>(iceCreamSalesAndSharkAttacks, <span class="fu">aes</span>(<span class="at">x =</span> numPeople, <span class="at">y =</span> numsharkAttacks)) <span class="sc">+</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="04_causality_files/figure-html/unnamed-chunk-2-2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-2"><img src="04_causality_files/figure-html/unnamed-chunk-2-2.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
 </div>
 </div>
-<div class="callout-body-container callout-body">
-<p>You can delete everything in here and start fresh.</p>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="fu">ggplot</span>(iceCreamSalesAndSharkAttacks, <span class="fu">aes</span>(<span class="at">x =</span> iceCreamSales, <span class="at">y =</span> numsharkAttacks)) <span class="sc">+</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"green"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="04_causality_files/figure-html/unnamed-chunk-2-3.png" class="lightbox" data-gallery="quarto-lightbox-gallery-3"><img src="04_causality_files/figure-html/unnamed-chunk-2-3.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
 </div>
 </div>
+</div>
+<p>It appears from the last scatter plot that increase in ice cream sales increase shark attack (spurious correlation). This is not true as both variables increase with the increase in the number of people.</p>
+</section>
+<section id="mediating-variables" class="level2">
+<h2 class="anchored" data-anchor-id="mediating-variables">Mediating Variables</h2>
+<p>The above example can be changed a bit to explain mediating variable as a cause of spurious correlation. Assume an increase in temperature causes more people to visit the beach and an increase in the the number of people will increase the number of shark attacks.</p>
+<p>(A -&gt; B -&gt; C) An increase an A, increases B which in turn increases C</p>
+<p>C is not dependent on A but it seems that A causes change in C (spurious correlation).</p>
+<p>A -&gt; Temperature, B -&gt; Number of people and C -&gt; Number of shark attacks</p>
+<div class="cell" data-hash="04_causality_cache/html/unnamed-chunk-3_9450f4aa1e24a0687cf746d68a8827ef">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>temperature <span class="ot">&lt;-</span> <span class="dv">15</span><span class="sc">:</span><span class="dv">40</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a>numPeople <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="dv">13</span><span class="sc">*</span>temperature<span class="sc">+</span><span class="fu">rnorm</span>(<span class="dv">26</span>, <span class="dv">0</span>, <span class="dv">30</span>))</span>
+<span id="cb4-3"><a href="#cb4-3"></a>numsharkAttacks <span class="ot">&lt;-</span> <span class="fu">round</span>((<span class="dv">5</span><span class="sc">/</span><span class="dv">250</span>)<span class="sc">*</span>numPeople<span class="sc">+</span><span class="fu">rnorm</span>(<span class="dv">26</span>, <span class="dv">1</span>, <span class="dv">1</span>))</span>
+<span id="cb4-4"><a href="#cb4-4"></a>numPeopleAndSharkAttacks <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">temperature =</span> <span class="dv">15</span><span class="sc">:</span><span class="dv">40</span>, numPeople, numsharkAttacks)</span>
+<span id="cb4-5"><a href="#cb4-5"></a></span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="fu">ggplot</span>(numPeopleAndSharkAttacks, <span class="fu">aes</span>(<span class="at">x =</span> temperature, <span class="at">y =</span> numPeople)) <span class="sc">+</span></span>
+<span id="cb4-7"><a href="#cb4-7"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"blue"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="04_causality_files/figure-html/unnamed-chunk-3-1.png" class="lightbox" data-gallery="quarto-lightbox-gallery-4"><img src="04_causality_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="fu">ggplot</span>(numPeopleAndSharkAttacks, <span class="fu">aes</span>(<span class="at">x =</span> numPeople, <span class="at">y =</span> numsharkAttacks)) <span class="sc">+</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="04_causality_files/figure-html/unnamed-chunk-3-2.png" class="lightbox" data-gallery="quarto-lightbox-gallery-5"><img src="04_causality_files/figure-html/unnamed-chunk-3-2.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode numberSource r number-lines code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="fu">ggplot</span>(numPeopleAndSharkAttacks, <span class="fu">aes</span>(<span class="at">x =</span> temperature, <span class="at">y =</span> numsharkAttacks)) <span class="sc">+</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"green"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><a href="04_causality_files/figure-html/unnamed-chunk-3-3.png" class="lightbox" data-gallery="quarto-lightbox-gallery-6"><img src="04_causality_files/figure-html/unnamed-chunk-3-3.png" class="img-fluid figure-img" width="672"></a></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Similarly, the last graph represents some erroneous result as it suggests that number of shark attacks increases with the increase in temperature.</p>
+</section>
+<section id="random-sampling-error" class="level2">
+<h2 class="anchored" data-anchor-id="random-sampling-error">Random Sampling Error</h2>
+<p>As the number of random samples in a sample space is limited do not always reflect the population mean accurately. Effects can be produced in the samples due to random sampling error.</p>
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -542,6 +674,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
+<script>var lightboxQuarto = GLightbox({"openEffect":"zoom","descPosition":"bottom","loop":true,"closeEffect":"zoom","selector":".lightbox"});</script>
 
 
 
